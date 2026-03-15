@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const auth = require("../controllers/auth.controller")
+const auth = require("../controllers/auth.controller.js")
 const { adminProtected } = require("../middleware/auth.middleware")
 
 router

@@ -18,6 +18,8 @@ exports.sendOTP = asyncHandler(async (req, res) => {
 
     const otp = crypto.randomInt(100000, 1000000)
 
+    console.log(otp)
+
     const hashOTP = await bcrypt.hash(String(otp), 10)
 
     await User.findByIdAndUpdate(admin._id, { otp: hashOTP, otpSendOn: new Date() })

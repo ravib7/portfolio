@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const { FRONTEND_URL } = require("./utils/config")
+const { adminProtected } = require("./middleware/auth.middleware.js")
 
 const app = express()
 app.use(express.json())
@@ -11,6 +12,7 @@ app.use(cors({ origin: FRONTEND_URL, credentials: true }))
 app.use(cookieParser())
 
 app.use("/api/auth", require("./routes/user.routes.js"))
+app.use("/api/admin", adminProtected, require("./routes/admin.routes.js"))
 
 app.use((req, res) => {
     res.status(404).json({ message: "resource not found" })
