@@ -13,6 +13,14 @@ exports.seedAdmin = async () => {
         await mongoose.connect(process.env.MONGO_URL)
         console.log("db connected")
 
+        const adminRole = await User.findOne({ role: "admin" })
+
+        if (adminRole) {
+            console.log("admin already exist")
+            await mongoose.connection.close()
+            process.exit(0)
+        }
+
         const admin = await User.findOne({ email: process.env.ADMIN_EMAIL })
 
         if (admin) {
