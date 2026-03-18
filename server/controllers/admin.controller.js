@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler")
 const Skills = require("../models/Skills")
 const Experiences = require("../models/Experiences")
+const Projects = require("../models/Projects")
+const About = require("../models/About")
 
 // skills section start
 exports.addSkills = asyncHandler(async (req, res) => {
@@ -55,4 +57,54 @@ exports.deleteExperience = asyncHandler(async (req, res) => {
     const { eid } = req.params
     await Experiences.findByIdAndDelete(eid)
     res.json({ message: "Experience Delete Successfully" })
+})
+
+// project section start
+exports.addProject = asyncHandler(async (req, res) => {
+    const { title, description, category, technologies, imageURL, liveURL, gitHubURL } = req.body
+    await Projects.create({ title, description, category, imageURL, technologies, liveURL, gitHubURL })
+    res.status(201).json({ message: "Project Added Successfully" })
+})
+
+exports.getProjects = asyncHandler(async (req, res) => {
+    const result = await Projects.find().sort({ createdAt: -1 })
+    res.json({ message: "Project Fetch Successfully", result })
+})
+
+exports.updateProject = asyncHandler(async (req, res) => {
+    const { pid } = req.params
+    const { title, description, technologies, imageURL, liveURL, gitHubURL } = req.body
+    await Projects.findByIdAndUpdate(pid, req.body)
+    res.json({ message: "Project Updated Successfully" })
+})
+
+exports.deleteProject = asyncHandler(async (req, res) => {
+    const { pid } = req.params
+    await Projects.findByIdAndDelete(pid)
+    res.json({ message: "Project Deleted Successfully" })
+})
+
+// about section start
+exports.addAboutInfo = asyncHandler(async (req, res) => {
+    const { name, title, introduction, journey, currentWork, dob, location, email, phone, languages, profileImage } = req.body
+    await About.create({ name, title, introduction, journey, currentWork, dob, location, email, phone, languages, profileImage })
+    res.status(201).json({ message: "About Information Added Successfully" })
+})
+
+exports.ReadAboutInfo = asyncHandler(async (req, res) => {
+    const result = await About.find()
+    res.json({ message: "About Information Fetch Successfully", result })
+})
+
+exports.updateAboutInfo = asyncHandler(async (req, res) => {
+    const { aid } = req.params
+    const { title, introduction, currentWork, location, email, phone, languages, profileImage } = req.body
+    await About.findByIdAndUpdate(aid, req.body)
+    res.status(201).json({ message: "About Information Updated Successfully" })
+})
+
+exports.deleteAboutInfo = asyncHandler(async (req, res) => {
+    const { aid } = req.params
+    await About.findByIdAndDelete(aid)
+    res.status(201).json({ message: "About Information Deleted Successfully" })
 })

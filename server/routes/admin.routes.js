@@ -14,5 +14,16 @@ router
     .patch("/update-experience/:eid", admin.updateExperience)
     .delete("/delete-experience/:eid", admin.deleteExperience)
 
+    // projects section
+    .post("/add-project", admin.addProject)
+    .get("/get-projects", admin.getProjects)
+    .patch("/update-project/:pid", admin.updateProject)
+    .delete("/delete-project/:pid", admin.deleteProject)
+
+    // about section
+    .post("/add-about-info", admin.addAboutInfo)
+    .get("/read-about-info", admin.ReadAboutInfo)
+    .patch("/update-about-info/:aid", admin.updateAboutInfo)
+    .delete("/delete-about-info/:aid", admin.deleteAboutInfo)
 
 module.exports = router
