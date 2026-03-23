@@ -6,7 +6,7 @@ module.exports = mongoose.model("About", new mongoose.Schema({
     introduction: { type: String, required: true },
     journey: { type: String },
     currentWork: { type: String },
-    dob: { type: Date },
+    dob: { type: String },
     location: { type: String, required: true, trim: true },
     email: {
         type: String, required: true, unique: true, lowercase: true,

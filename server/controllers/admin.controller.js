@@ -22,7 +22,7 @@ exports.getSkills = asyncHandler(async (req, res) => {
 exports.updateSkills = asyncHandler(async (req, res) => {
     const { sid } = req.params
     const { level } = req.body
-    await Skills.findByIdAndUpdate(sid, req.body, { new: true })
+    await Skills.findByIdAndUpdate(sid, { level }, { new: true, runValidators: true })
     res.json({ message: "Skills Updated Successfully" })
 })
 
@@ -43,13 +43,31 @@ exports.addExperience = asyncHandler(async (req, res) => {
 
 exports.getExperience = asyncHandler(async (req, res) => {
     const result = await Experiences.find().sort({ order: 1 })
-    res.json({ message: "Experience Fetch Successfully", result })
+    res.json({ message: "Experience Fetched Successfully", result })
 })
 
 exports.updateExperience = asyncHandler(async (req, res) => {
     const { eid } = req.params
-    const { role, company, period, responsibilities } = req.body
-    await Experiences.findByIdAndUpdate(eid, req.body)
+
+    const allowedFields = ["role", "company", "period", "responsibilities"]
+
+    const updateData = {}
+
+    for (let key in req.body) {
+        if (allowedFields.includes(key) && req.body[key] !== undefined) {
+            updateData[key] = req.body[key]
+        }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" })
+    }
+
+    await Experiences.findByIdAndUpdate(eid, updateData, {
+        new: true,
+        runValidators: true
+    })
+
     res.json({ message: "Experience Updated Successfully" })
 })
 
@@ -73,8 +91,28 @@ exports.getProjects = asyncHandler(async (req, res) => {
 
 exports.updateProject = asyncHandler(async (req, res) => {
     const { pid } = req.params
-    const { title, description, technologies, imageURL, liveURL, gitHubURL } = req.body
-    await Projects.findByIdAndUpdate(pid, req.body)
+
+    const allowedFields = ["title", "description", "technologies", "imageURL", "liveURL", "gitHubURL"]
+
+    const updateData = {}
+
+    for (let key in req.body) {
+        //                   👇 check if something exists in a list (Is this key inside allowedFields list?)
+        if (allowedFields.includes(key) && req.body[key] !== undefined) {
+            updateData[key] = req.body[key]
+        }
+    }
+
+    //    👇 Converts object into array of keys ["title", "description"]
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" })
+    }
+
+    await Projects.findByIdAndUpdate(pid, updateData, {
+        new: true,
+        runValidators: true
+    })
+
     res.json({ message: "Project Updated Successfully" })
 })
 
@@ -98,13 +136,28 @@ exports.ReadAboutInfo = asyncHandler(async (req, res) => {
 
 exports.updateAboutInfo = asyncHandler(async (req, res) => {
     const { aid } = req.params
-    const { title, introduction, currentWork, location, email, phone, languages, profileImage } = req.body
-    await About.findByIdAndUpdate(aid, req.body)
-    res.status(201).json({ message: "About Information Updated Successfully" })
+
+    const allowedFields = ["title", "introduction", "currentWork", "location", "email", "phone", "languages", "profileImage"]
+
+    const updateData = {}
+
+    for (let key in req.body) {
+        if (allowedFields.includes(key) && req.body[key] !== undefined) {
+            updateData[key] = req.body[key]
+        }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" })
+    }
+
+    await About.findByIdAndUpdate(aid, updateData, { new: true, runValidators: true })
+
+    res.json({ message: "About Information Updated Successfully" })
 })
 
 exports.deleteAboutInfo = asyncHandler(async (req, res) => {
     const { aid } = req.params
     await About.findByIdAndDelete(aid)
-    res.status(201).json({ message: "About Information Deleted Successfully" })
+    res.json({ message: "About Information Deleted Successfully" })
 })
