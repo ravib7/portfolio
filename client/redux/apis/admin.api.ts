@@ -1,10 +1,15 @@
 import { APP_URL } from "@/constants/config"
 import { ADD_ABOUT_REQUEST, ADD_EXPERIENCE_REQUEST, ADD_PROJECT_REQUEST, ADD_SKILLS_REQUEST, COMMON_RESPONSE, DELETE_ABOUT_REQUEST, DELETE_EXPERIENCE_REQUEST, DELETE_PROJECT_REQUEST, DELETE_SKILLS_REQUEST, GET_EXPERIENCE_RESPONSE, GET_PROJECT_RESPONSE, GET_SKILLS_RESPONSE, READ_ABOUT_INFO_RESPONSE, UPDATE_ABOUT_REQUEST, UPDATE_EXPERIENCE_REQUEST, UPDATE_PROJECT_REQUEST, UPDATE_SKILLS_REQUEST } from "@/types/admin"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { createAutoLogoutBaseQuery } from "./createAutoLogoutBaseQuery"
 
 export const adminApi = createApi({
     reducerPath: "adminApi",
-    baseQuery: fetchBaseQuery({ baseUrl: `${APP_URL}/api/admin`, credentials: "include" }),
+    // baseQuery: fetchBaseQuery({ baseUrl: `${APP_URL}/api/admin`, credentials: "include" }),
+    baseQuery: createAutoLogoutBaseQuery({
+        baseUrl: `${APP_URL}/api/admin`,
+        redirectPath: "/admin/login"
+    }),
     tagTypes: ["admin"],
     endpoints: (builder) => {
         return {
