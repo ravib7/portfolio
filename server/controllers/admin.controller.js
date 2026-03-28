@@ -21,8 +21,27 @@ exports.getSkills = asyncHandler(async (req, res) => {
 
 exports.updateSkills = asyncHandler(async (req, res) => {
     const { sid } = req.params
-    const { level } = req.body
-    await Skills.findByIdAndUpdate(sid, { level }, { new: true, runValidators: true })
+
+    const allowedFields = ["skillName", "category", "level"]
+
+    const updateData = {}
+
+    for (let key in req.body) {
+        if (allowedFields.includes(key) && req.body[key] !== undefined) {
+            updateData[key] = req.body[key]
+        }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" })
+    }
+
+    await Skills.findByIdAndUpdate(sid, updateData,
+        {
+            new: true,
+            runValidators: true
+        })
+
     res.json({ message: "Skills Updated Successfully" })
 })
 
@@ -79,8 +98,15 @@ exports.deleteExperience = asyncHandler(async (req, res) => {
 
 // project section start
 exports.addProject = asyncHandler(async (req, res) => {
-    const { title, description, category, technologies, imageURL, liveURL, gitHubURL } = req.body
-    await Projects.create({ title, description, category, imageURL, technologies, liveURL, gitHubURL })
+    let { title, description, category, technologies, imageURL, liveURL, gitHubURL } = req.body
+
+    if (typeof technologies === "string") {
+        techArray = technologies.split(",").map(t => t.trim())
+    } else if (Array.isArray(technologies)) {
+        techArray = technologies
+    }
+
+    await Projects.create({ title, description, category, imageURL, technologies: techArray, liveURL, gitHubURL })
     res.status(201).json({ message: "Project Added Successfully" })
 })
 
@@ -92,7 +118,7 @@ exports.getProjects = asyncHandler(async (req, res) => {
 exports.updateProject = asyncHandler(async (req, res) => {
     const { pid } = req.params
 
-    const allowedFields = ["title", "description", "technologies", "imageURL", "liveURL", "gitHubURL"]
+    const allowedFields = ["title", "description", "category", "technologies", "imageURL", "liveURL", "gitHubURL"]
 
     const updateData = {}
 

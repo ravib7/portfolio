@@ -192,5 +192,23 @@ export const adminApi = createApi({
 })
 
 export const {
+    useGetSkillsQuery,
+    useAddSkillsMutation,
+    useUpdateSkillsMutation,
+    useDeleteSkillsMutation,
 
+    useGetExperienceQuery,
+    useAddExperienceMutation,
+    useUpdateExperienceMutation,
+    useDeleteExperienceMutation,
+
+    useGetProjectsQuery,
+    useAddProjectMutation,
+    useUpdateProjectMutation,
+    useDeleteProjectMutation,
+
+    useReadAboutInfoQuery,
+    useAddAboutInfoMutation,
+    useUpdateAboutInfoMutation,
+    useDeleteAboutInfoMutation
 } = adminApi

@@ -6,7 +6,7 @@ export type SKILLS = {
     _id?: string,
     skillName: string,
     category: "frontend" | "backend",
-    level: number,
+    level: string,
     order?: number
 }
 
@@ -19,9 +19,12 @@ export type GET_SKILLS_RESPONSE = {
 }
 
 export type UPDATE_SKILLS_REQUEST = {
-    _id: string,
-    level: number,
-}
+    _id: string
+} & Partial<{
+    skillName: string,
+    category: "frontend" | "backend",
+    level: string,
+}>
 
 export type DELETE_SKILLS_REQUEST = {
     _id: string
@@ -70,7 +73,15 @@ export type PROJECT = {
     gitHubURL?: string
 }
 
-export type ADD_PROJECT_REQUEST = Omit<PROJECT, "_id">
+export type ADD_PROJECT_REQUEST = {
+    title: string,
+    description: string,
+    category: "web" | "mobile",
+    technologies: string,
+    imageURL?: string,
+    liveURL?: string,
+    gitHubURL?: string
+}
 
 export type GET_PROJECT_RESPONSE = {
     message: string,
@@ -79,15 +90,13 @@ export type GET_PROJECT_RESPONSE = {
 
 export type UPDATE_PROJECT_REQUEST = {
     _id: string
-} & Partial<{
-    title: string,
-    description: string,
-    technologies: string[],
-    imageURL: string,
-    liveURL: string,
-    gitHubURL: string
-}>
-
+    title: string
+    description: string
+    technologies: string[]
+    imageURL?: string
+    liveURL?: string
+    gitHubURL?: string
+}
 
 export type DELETE_PROJECT_REQUEST = {
     _id: string
