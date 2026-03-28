@@ -92,6 +92,7 @@ export type UPDATE_PROJECT_REQUEST = {
     _id: string
     title: string
     description: string
+    category: "web" | "mobile"
     technologies: string[]
     imageURL?: string
     liveURL?: string
