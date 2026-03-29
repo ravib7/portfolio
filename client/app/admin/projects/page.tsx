@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Pencil, Trash2, Plus } from "lucide-react"
+import { Pencil, Trash2, Plus, Link2, Code } from "lucide-react"
 import { useAddProjectMutation, useDeleteProjectMutation, useGetProjectsQuery, useUpdateProjectMutation } from "@/redux/apis/admin.api"
 import z from "zod"
 import { ADD_PROJECT_REQUEST, DELETE_PROJECT_REQUEST, PROJECT } from "@/types/admin"
@@ -109,7 +109,7 @@ const ProjectsPage = () => {
                 {data && data.result.map((item, index) => (
                     <Card
                         key={index}
-                        className="group relative overflow-hidden border-0 shadow-lg rounded-2xl bg-white/70 backdrop-blur-lg hover:shadow-2xl transition-all duration-300"
+                        className="flex flex-col h-full group relative overflow-hidden border-0 shadow-lg rounded-2xl bg-white/70 backdrop-blur-lg hover:shadow-2xl transition-all duration-300 pt-0"
                     >
 
                         {/* Image */}
@@ -117,11 +117,8 @@ const ProjectsPage = () => {
                             <img
                                 src={item.imageURL || "/placeholder.png"}
                                 alt="Project"
-                                className="aspect-[16/9] w-full object-fit group-hover:scale-105 transition duration-500"
+                                className="w-full h-48 object-contain bg-gray-100 group-hover:scale-105 transition duration-500"
                             />
-
-                            {/* Gradient Overlay */}
-                            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80" /> */}
 
                             {/* Floating Buttons */}
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
@@ -150,17 +147,14 @@ const ProjectsPage = () => {
                                     <Trash2 className="w-4 h-4 text-red-600" />
                                 </Button>
                             </div>
-
-                            {/* Category Badge */}
-                            <div className="absolute bottom-3 left-3">
-                                <Badge className="bg-white/90 text-gray-800 shadow">
-                                    {item.category}
-                                </Badge>
-                            </div>
                         </div>
 
                         {/* Content */}
-                        < CardContent className="p-4 space-y-3" >
+                        <CardContent className="p-4 flex flex-col gap-3 flex-1">
+
+                            <Badge className="bg-blue-100 text-blue-600 w-fit px-3 py-1 text-sm font-semibold rounded-md">
+                                {item.category}
+                            </Badge>
 
                             {/* Title */}
                             <h2 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition" >
@@ -168,7 +162,7 @@ const ProjectsPage = () => {
                             </h2>
 
                             {/* Description */}
-                            <p className="text-sm text-gray-600 line-clamp-2">
+                            <p className="text-sm text-gray-600">
                                 {item.description}
                             </p>
 
@@ -185,24 +179,34 @@ const ProjectsPage = () => {
                             </div>
 
                             {/* Buttons */}
-                            <div className="flex justify-between items-center pt-3">
+                            <div className="mt-auto pt-4">
+                                <div className="flex gap-3 flex-wrap">
 
-                                <div className="flex gap-2">
                                     {item.liveURL && (
                                         <a href={item.liveURL} target="_blank">
-                                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
-                                                Live
+                                            <Button
+                                                size="sm"
+                                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                                            >
+                                                <Link2 size={16} />
+                                                Live Demo
                                             </Button>
                                         </a>
                                     )}
 
                                     {item.gitHubURL && (
                                         <a href={item.gitHubURL} target="_blank">
-                                            <Button size="sm" variant="outline" className="cursor-pointer">
-                                                Code
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="flex items-center gap-2 cursor-pointer"
+                                            >
+                                                <Code size={16} />
+                                                Source Code
                                             </Button>
                                         </a>
                                     )}
+
                                 </div>
                             </div>
 
