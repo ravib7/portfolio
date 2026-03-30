@@ -53,10 +53,22 @@ exports.deleteSkills = asyncHandler(async (req, res) => {
 
 // experiences section start
 exports.addExperience = asyncHandler(async (req, res) => {
-    const { role, company, period, description, responsibilities } = req.body
+    const { role, company, startDate, endDate, description, responsibilities } = req.body
+
+    let responseArray = []
+
+    if (typeof responsibilities === "string") {
+        responseArray = responsibilities
+            .split("\n")
+            .map(t => t.trim())
+            .filter(Boolean)
+    } else if (Array.isArray(responsibilities)) {
+        responseArray = responsibilities
+    }
+
     const lastExperience = await Experiences.findOne().sort({ order: -1 })
     const order = lastExperience ? lastExperience.order + 1 : 0
-    await Experiences.create({ role, company, period, description, responsibilities, order })
+    await Experiences.create({ role, company, startDate, endDate, description, responsibilities: responseArray, order })
     res.status(201).json({ message: "Experience Added Successfully" })
 })
 
@@ -68,13 +80,37 @@ exports.getExperience = asyncHandler(async (req, res) => {
 exports.updateExperience = asyncHandler(async (req, res) => {
     const { eid } = req.params
 
-    const allowedFields = ["role", "company", "period", "responsibilities"]
+    const allowedFields = [
+        "role",
+        "company",
+        "startDate",
+        "endDate",
+        "description",
+        "responsibilities"
+    ]
 
     const updateData = {}
 
     for (let key in req.body) {
         if (allowedFields.includes(key) && req.body[key] !== undefined) {
-            updateData[key] = req.body[key]
+
+            if (key === "responsibilities") {
+                let responseArray = []
+
+                if (typeof req.body.responsibilities === "string") {
+                    responseArray = req.body.responsibilities
+                        .split("\n")
+                        .map(t => t.trim())
+                        .filter(Boolean)
+                } else if (Array.isArray(req.body.responsibilities)) {
+                    responseArray = req.body.responsibilities
+                }
+
+                updateData.responsibilities = responseArray
+
+            } else {
+                updateData[key] = req.body[key]
+            }
         }
     }
 
@@ -125,7 +161,24 @@ exports.updateProject = asyncHandler(async (req, res) => {
     for (let key in req.body) {
         //                   👇 check if something exists in a list (Is this key inside allowedFields list?)
         if (allowedFields.includes(key) && req.body[key] !== undefined) {
-            updateData[key] = req.body[key]
+
+            if (key === "technologies") {
+                let techArray = []
+
+                if (typeof req.body.technologies === "string") {
+                    techArray = req.body.technologies
+                        .split(",")
+                        .map(t => t.trim())
+                        .filter(Boolean)
+                } else if (Array.isArray(req.body.technologies)) {
+                    techArray = req.body.technologies
+                }
+
+                updateData.technologies = techArray
+
+            } else {
+                updateData[key] = req.body[key]
+            }
         }
     }
 

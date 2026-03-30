@@ -35,13 +35,23 @@ export type EXPERIENCE = {
     _id?: string,
     role: string,
     company: string,
-    period: string,
+    startDate: Date,
+    endDate?: Date,
     description?: string,
     responsibilities: string[],
     order?: number
 }
 
-export type ADD_EXPERIENCE_REQUEST = Omit<EXPERIENCE, "_id" | "order">
+export type ADD_EXPERIENCE_REQUEST = {
+    _id?: string,
+    role: string,
+    company: string,
+    startDate: Date,
+    endDate?: Date,
+    description?: string,
+    responsibilities: string,
+    order?: number
+}
 
 export type GET_EXPERIENCE_RESPONSE = {
     message: string,
@@ -53,8 +63,10 @@ export type UPDATE_EXPERIENCE_REQUEST = {
 } & Partial<{
     role: string,
     company: string,
-    period: string,
-    responsibilities: string[]
+    startDate: Date,
+    endDate?: Date,
+    description?: string,
+    responsibilities: string
 }>
 
 export type DELETE_EXPERIENCE_REQUEST = {
@@ -90,14 +102,15 @@ export type GET_PROJECT_RESPONSE = {
 
 export type UPDATE_PROJECT_REQUEST = {
     _id: string
+} & Partial<{
     title: string
     description: string
     category: "web" | "mobile"
-    technologies: string[]
+    technologies: string
     imageURL?: string
     liveURL?: string
     gitHubURL?: string
-}
+}>
 
 export type DELETE_PROJECT_REQUEST = {
     _id: string

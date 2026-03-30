@@ -50,16 +50,11 @@ const ProjectsPage = () => {
 
     const handleProject = async (data: ADD_PROJECT_REQUEST) => {
         try {
-            const formattedData = {
-                ...data,
-                technologies: data.technologies.split(",").map(t => t.trim())
-            }
-
             if (selectedProject) {
                 await updateProject({
-                    _id: selectedProject._id,
-                    ...formattedData
-                })
+                    _id: selectedProject._id!,
+                    ...data
+                }).unwrap()
                 toast.success("Project Updated Successfully")
                 reset({ title: "", description: "", category: "web", technologies: "", imageURL: "", liveURL: "", gitHubURL: "" })
                 setSelectedProject(null);
@@ -282,11 +277,10 @@ const ProjectsPage = () => {
                             )}
                         />
 
-                        <Input
+                        <Textarea
                             {...register("technologies")}
-                            type="text"
-                            placeholder="Enter Technologies"
                             className="border p-2 rounded-md"
+                            placeholder="Enter technologies (one per line)"
                         />
 
                         <Input
