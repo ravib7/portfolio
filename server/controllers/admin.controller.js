@@ -3,6 +3,7 @@ const Skills = require("../models/Skills")
 const Experiences = require("../models/Experiences")
 const Projects = require("../models/Projects")
 const About = require("../models/About")
+const Education = require("../models/Education")
 
 // skills section start
 exports.addSkills = asyncHandler(async (req, res) => {
@@ -204,7 +205,14 @@ exports.deleteProject = asyncHandler(async (req, res) => {
 // about section start
 exports.addAboutInfo = asyncHandler(async (req, res) => {
     const { name, title, introduction, journey, currentWork, dob, location, email, phone, languages, profileImage } = req.body
-    await About.create({ name, title, introduction, journey, currentWork, dob, location, email, phone, languages, profileImage })
+
+    if (typeof languages === "string") {
+        languagesArray = languages.split(",").map(t => t.trim())
+    } else if (Array.isArray(languages)) {
+        languagesArray = languages
+    }
+
+    await About.create({ name, title, introduction, journey, currentWork, dob, location, email, phone, languages: languagesArray, profileImage })
     res.status(201).json({ message: "About Information Added Successfully" })
 })
 
@@ -216,13 +224,29 @@ exports.ReadAboutInfo = asyncHandler(async (req, res) => {
 exports.updateAboutInfo = asyncHandler(async (req, res) => {
     const { aid } = req.params
 
-    const allowedFields = ["title", "introduction", "currentWork", "location", "email", "phone", "languages", "profileImage"]
+    const allowedFields = ["name", "title", "introduction", "journey", "currentWork", "dob", "location", "email", "phone", "languages", "profileImage"]
 
     const updateData = {}
 
     for (let key in req.body) {
         if (allowedFields.includes(key) && req.body[key] !== undefined) {
-            updateData[key] = req.body[key]
+            if (key === "languages") {
+                let languagesArray = []
+
+                if (typeof req.body.languages === "string") {
+                    languagesArray = req.body.languages
+                        .split(",")
+                        .map(t => t.trim())
+                        .filter(Boolean)
+                } else if (Array.isArray(req.body.languages)) {
+                    languagesArray = req.body.languages
+                }
+
+                updateData.languages = languagesArray
+
+            } else {
+                updateData[key] = req.body[key]
+            }
         }
     }
 
@@ -239,4 +263,44 @@ exports.deleteAboutInfo = asyncHandler(async (req, res) => {
     const { aid } = req.params
     await About.findByIdAndDelete(aid)
     res.json({ message: "About Information Deleted Successfully" })
+})
+
+// Education section Start
+exports.addEducationInfo = asyncHandler(async (req, res) => {
+    const { degree, college, field, startYear, endYear } = req.body
+    await Education.create({ degree, college, field, startYear, endYear })
+    res.status(201).json({ message: "Education Information Added Successfully" })
+})
+
+exports.getEducationInfo = asyncHandler(async (req, res) => {
+    const result = await Education.find()
+    res.status(201).json({ message: "Education Information Fetch Successfully", result })
+})
+
+exports.updateEducationInfo = asyncHandler(async (req, res) => {
+    const { eid } = req.params
+
+    const allowedFields = ["degree", "college", "field", "startYear", "endYear"]
+
+    const updateData = {}
+
+    for (let key in req.body) {
+        if (allowedFields.includes(key) && req.body[key] !== undefined) {
+            updateData[key] = req.body[key]
+        }
+    }
+
+    if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" })
+    }
+
+    await Education.findByIdAndUpdate(eid, updateData, { new: true, runValidators: true })
+
+    res.json({ message: "Education Information Updated Successfully" })
+})
+
+exports.deleteEducationInfo = asyncHandler(async (req, res) => {
+    const { eid } = req.params
+    await Education.findByIdAndDelete(eid)
+    res.json({ message: "Education Information Deleted Successfully" })
 })

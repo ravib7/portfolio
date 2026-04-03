@@ -1,5 +1,5 @@
 import { APP_URL } from "@/constants/config"
-import { ADD_ABOUT_REQUEST, ADD_EXPERIENCE_REQUEST, ADD_PROJECT_REQUEST, ADD_SKILLS_REQUEST, COMMON_RESPONSE, DELETE_ABOUT_REQUEST, DELETE_EXPERIENCE_REQUEST, DELETE_PROJECT_REQUEST, DELETE_SKILLS_REQUEST, GET_EXPERIENCE_RESPONSE, GET_PROJECT_RESPONSE, GET_SKILLS_RESPONSE, READ_ABOUT_INFO_RESPONSE, UPDATE_ABOUT_REQUEST, UPDATE_EXPERIENCE_REQUEST, UPDATE_PROJECT_REQUEST, UPDATE_SKILLS_REQUEST } from "@/types/admin"
+import { ADD_ABOUT_REQUEST, ADD_EDUCATION_REQUEST, ADD_EXPERIENCE_REQUEST, ADD_PROJECT_REQUEST, ADD_SKILLS_REQUEST, COMMON_RESPONSE, DELETE_ABOUT_REQUEST, DELETE_EDUCATION_REQUEST, DELETE_EXPERIENCE_REQUEST, DELETE_PROJECT_REQUEST, DELETE_SKILLS_REQUEST, GET_EDUCATION_RESPONSE, GET_EXPERIENCE_RESPONSE, GET_PROJECT_RESPONSE, GET_SKILLS_RESPONSE, READ_ABOUT_INFO_RESPONSE, UPDATE_ABOUT_REQUEST, UPDATE_EDUCATION_REQUEST, UPDATE_EXPERIENCE_REQUEST, UPDATE_PROJECT_REQUEST, UPDATE_SKILLS_REQUEST } from "@/types/admin"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { createAutoLogoutBaseQuery } from "./createAutoLogoutBaseQuery"
 
@@ -187,6 +187,49 @@ export const adminApi = createApi({
                 invalidatesTags: ["admin"]
             }),
 
+
+            getEducationInfo: builder.query<GET_EDUCATION_RESPONSE, void>({
+                query: () => {
+                    return {
+                        url: "/get-education-info",
+                        method: "GET",
+                    }
+                },
+                providesTags: ["admin"]
+            }),
+
+            addEducationInfo: builder.mutation<COMMON_RESPONSE, ADD_EDUCATION_REQUEST>({
+                query: educationData => {
+                    return {
+                        url: "/add-education-info",
+                        method: "POST",
+                        body: educationData
+                    }
+                },
+                invalidatesTags: ["admin"]
+            }),
+
+            updateEducationInfo: builder.mutation<COMMON_RESPONSE, UPDATE_EDUCATION_REQUEST>({
+                query: educationData => {
+                    return {
+                        url: "/update-education-info/" + educationData._id,
+                        method: "PATCH",
+                        body: educationData
+                    }
+                },
+                invalidatesTags: ["admin"]
+            }),
+
+            deleteEducationInfo: builder.mutation<COMMON_RESPONSE, DELETE_EDUCATION_REQUEST>({
+                query: educationData => {
+                    return {
+                        url: "/delete-education-info/" + educationData._id,
+                        method: "DELETE",
+                    }
+                },
+                invalidatesTags: ["admin"]
+            }),
+
         }
     }
 })
@@ -210,5 +253,10 @@ export const {
     useReadAboutInfoQuery,
     useAddAboutInfoMutation,
     useUpdateAboutInfoMutation,
-    useDeleteAboutInfoMutation
+    useDeleteAboutInfoMutation,
+
+    useGetEducationInfoQuery,
+    useAddEducationInfoMutation,
+    useUpdateEducationInfoMutation,
+    useDeleteEducationInfoMutation
 } = adminApi

@@ -118,7 +118,7 @@ export type DELETE_PROJECT_REQUEST = {
 
 
 export type ABOUT = {
-    _id?: string,
+    _id: string,
     name: string,
     title: string,
     introduction: string,
@@ -137,22 +137,69 @@ export type READ_ABOUT_INFO_RESPONSE = {
     result: ABOUT[]
 }
 
-export type ADD_ABOUT_REQUEST = Omit<ABOUT, "_id">
+export type ADD_ABOUT_REQUEST = {
+    name: string,
+    title: string,
+    introduction: string,
+    journey?: string,
+    currentWork?: string,
+    dob?: string,
+    location: string,
+    email: string,
+    phone: string,
+    languages?: string,
+    profileImage?: string
+}
 
 export type UPDATE_ABOUT_REQUEST = {
     _id: string
 } & Partial<{
+    name: string,
     title: string,
     introduction: string,
-    currentWork: string,
+    journey?: string,
+    currentWork?: string,
+    dob?: string,
     location: string,
     email: string,
     phone: string,
-    languages: string[],
-    profileImage: string
+    languages?: string,
+    profileImage?: string
 }>
 
 
 export type DELETE_ABOUT_REQUEST = {
+    _id: string
+}
+
+
+
+export type EDUCATION = {
+    _id: string
+    degree: string
+    college: string
+    field: string
+    startYear: string
+    endYear: string
+}
+
+export type ADD_EDUCATION_REQUEST = Omit<EDUCATION, "_id">
+
+export type GET_EDUCATION_RESPONSE = {
+    message: string,
+    result: EDUCATION[]
+}
+
+export type UPDATE_EDUCATION_REQUEST = {
+    _id: string
+} & Partial<{
+    degree: string
+    college: string
+    field: string
+    startYear: string
+    endYear: string
+}>
+
+export type DELETE_EDUCATION_REQUEST = {
     _id: string
 }

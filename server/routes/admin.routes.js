@@ -26,4 +26,11 @@ router
     .patch("/update-about-info/:aid", admin.updateAboutInfo)
     .delete("/delete-about-info/:aid", admin.deleteAboutInfo)
 
+    // education section
+    .post("/add-education-info", admin.addEducationInfo)
+    .get("/get-education-info", admin.getEducationInfo)
+    .patch("/update-education-info/:eid", admin.updateEducationInfo)
+    .delete("/delete-education-info/:eid", admin.deleteEducationInfo)
+
+
 module.exports = router

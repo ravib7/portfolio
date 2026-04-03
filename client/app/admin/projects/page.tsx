@@ -306,7 +306,7 @@ const ProjectsPage = () => {
 
                         {
                             selectedProject
-                                ? <Button type="submit" className="bg-yellow-500 text-white cursor-pointer">
+                                ? <Button type="submit" className="bg-yellow-500 hover:bg-yellow-400 text-white cursor-pointer">
                                     Update Project
                                 </Button>
                                 : <Button type="submit" className="bg-[#145EFB] text-white cursor-pointer">

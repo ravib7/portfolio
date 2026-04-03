@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Menu, X, BookOpen, Briefcase, Folder, Grid, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import { useAppSelector } from "@/redux/store";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +18,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         { id: 3, label: "Projects", path: "/admin/projects", icon: Folder },
         { id: 4, label: "Experience", path: "/admin/experience", icon: Briefcase },
         { id: 5, label: "About", path: "/admin/about", icon: User },
+        { id: 6, label: "Education", path: "/admin/education", icon: User },
     ];
 
     const getPageTitle = () => {
@@ -36,15 +36,6 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
     //         router.push("/secretary-login");
     //     }
     // }, [isSuccess, router]);
-
-    // useEffect(() => {
-    //     if (pathname === "/admin") {
-    //         const timer = setTimeout(() => {
-    //             router.push("/admin");
-    //         }, 300);
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [pathname, router]);
 
     return (
         <div className="flex min-h-screen bg-gray-100">

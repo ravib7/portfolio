@@ -82,7 +82,7 @@ const page = () => {
             toast.success("Experience Deleted Successfully")
         } catch (error) {
             console.log(error)
-            toast.error("Experience Deleted Successfully")
+            toast.error("unable to delete experience")
         }
     }
 
