@@ -1,5 +1,5 @@
 import { APP_URL } from "@/constants/config"
-import { ADD_ABOUT_REQUEST, ADD_EDUCATION_REQUEST, ADD_EXPERIENCE_REQUEST, ADD_PROJECT_REQUEST, ADD_SKILLS_REQUEST, COMMON_RESPONSE, DELETE_ABOUT_REQUEST, DELETE_EDUCATION_REQUEST, DELETE_EXPERIENCE_REQUEST, DELETE_PROJECT_REQUEST, DELETE_SKILLS_REQUEST, GET_EDUCATION_RESPONSE, GET_EXPERIENCE_RESPONSE, GET_PROJECT_RESPONSE, GET_SKILLS_RESPONSE, READ_ABOUT_INFO_RESPONSE, UPDATE_ABOUT_REQUEST, UPDATE_EDUCATION_REQUEST, UPDATE_EXPERIENCE_REQUEST, UPDATE_PROJECT_REQUEST, UPDATE_SKILLS_REQUEST } from "@/types/admin"
+import { ADD_ABOUT_REQUEST, ADD_EDUCATION_REQUEST, ADD_EXPERIENCE_REQUEST, ADD_PROJECT_REQUEST, ADD_SKILLS_REQUEST, COMMON_RESPONSE, DELETE_ABOUT_REQUEST, DELETE_EDUCATION_REQUEST, DELETE_EXPERIENCE_REQUEST, DELETE_PROJECT_REQUEST, DELETE_SKILLS_REQUEST, GET_DASHBOARD_STATS_RESPONSE, GET_EDUCATION_RESPONSE, GET_EXPERIENCE_RESPONSE, GET_PROJECT_RESPONSE, GET_SKILLS_RESPONSE, READ_ABOUT_INFO_RESPONSE, UPDATE_ABOUT_REQUEST, UPDATE_EDUCATION_REQUEST, UPDATE_EXPERIENCE_REQUEST, UPDATE_PROJECT_REQUEST, UPDATE_SKILLS_REQUEST } from "@/types/admin"
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { createAutoLogoutBaseQuery } from "./createAutoLogoutBaseQuery"
 
@@ -230,6 +230,17 @@ export const adminApi = createApi({
                 invalidatesTags: ["admin"]
             }),
 
+
+            fetchDashboardStats: builder.query<GET_DASHBOARD_STATS_RESPONSE, void>({
+                query: () => {
+                    return {
+                        url: "/dashboard-stats",
+                        method: "GET",
+                    }
+                },
+                providesTags: ["admin"]
+            }),
+
         }
     }
 })
@@ -258,5 +269,7 @@ export const {
     useGetEducationInfoQuery,
     useAddEducationInfoMutation,
     useUpdateEducationInfoMutation,
-    useDeleteEducationInfoMutation
+    useDeleteEducationInfoMutation,
+
+    useFetchDashboardStatsQuery
 } = adminApi

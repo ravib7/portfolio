@@ -33,4 +33,7 @@ router
     .delete("/delete-education-info/:eid", admin.deleteEducationInfo)
 
 
+    // status section 
+    .get("/dashboard-stats", admin.getDashboardStats)
+
 module.exports = router

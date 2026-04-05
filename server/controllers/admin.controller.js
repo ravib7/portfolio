@@ -304,3 +304,18 @@ exports.deleteEducationInfo = asyncHandler(async (req, res) => {
     await Education.findByIdAndDelete(eid)
     res.json({ message: "Education Information Deleted Successfully" })
 })
+
+// status section start
+exports.getDashboardStats = asyncHandler(async (req, res) => {
+    const projectCount = await Projects.countDocuments()
+    const experienceCount = await Experiences.countDocuments()
+    const skillsCount = await Skills.countDocuments()
+
+    res.json({
+        message: "All Data Fetch Successfully", result: {
+            projectCount,
+            experienceCount,
+            skillsCount
+        }
+    })
+})

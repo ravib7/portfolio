@@ -203,3 +203,13 @@ export type UPDATE_EDUCATION_REQUEST = {
 export type DELETE_EDUCATION_REQUEST = {
     _id: string
 }
+
+
+export type GET_DASHBOARD_STATS_RESPONSE = {
+    message: string,
+    result: {
+        projectCount: number
+        experienceCount: number
+        skillsCount: number
+    }
+}
