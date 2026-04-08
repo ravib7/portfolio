@@ -18,8 +18,6 @@ exports.sendOTP = asyncHandler(async (req, res) => {
 
     const otp = crypto.randomInt(100000, 1000000)
 
-    console.log(otp)
-
     const hashOTP = await bcrypt.hash(String(otp), 10)
 
     await User.findByIdAndUpdate(admin._id, { otp: hashOTP, otpSendOn: new Date() })
@@ -64,7 +62,7 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
     res.cookie("ADMIN", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === PRODUCTION,
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60
     })
 
     res.status(200).json({

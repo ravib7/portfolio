@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { toast } from "react-toastify"
+import { toast } from "sonner";
 
 export const createAutoLogoutBaseQuery = ({ baseUrl, redirectPath }: { baseUrl: string; redirectPath: string }) => {
     const baseQuery = fetchBaseQuery({ baseUrl, credentials: "include" })

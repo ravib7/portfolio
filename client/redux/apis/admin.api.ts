@@ -8,7 +8,7 @@ export const adminApi = createApi({
     // baseQuery: fetchBaseQuery({ baseUrl: `${APP_URL}/api/admin`, credentials: "include" }),
     baseQuery: createAutoLogoutBaseQuery({
         baseUrl: `${APP_URL}/api/admin`,
-        redirectPath: "/admin/login"
+        redirectPath: "/login"
     }),
     tagTypes: ["admin"],
     endpoints: (builder) => {

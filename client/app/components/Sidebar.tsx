@@ -5,12 +5,17 @@ import { Menu, X, BookOpen, Briefcase, Folder, Grid, User, GraduationCap } from 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector } from "@/redux/store";
+import { useSignOutMutation } from "@/redux/apis/auth.api";
+import { toast } from "sonner";
 
 const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
     const { admin } = useAppSelector(state => state.auth)
-    const pathname = usePathname();
+    const [logout, { isSuccess }] = useSignOutMutation()
     const [open, setOpen] = useState(true);
+    const pathname = usePathname();
+
+    const { push } = useRouter()
 
     const menuItems = [
         { id: 1, label: "Dashboard", path: "/admin", icon: Grid },
@@ -30,12 +35,13 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
         return current ? current.label : "Dashboard";
     };
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         toast.success("Secretary Logout Successfully");
-    //         router.push("/secretary-login");
-    //     }
-    // }, [isSuccess, router]);
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success("Admin Logout Successfully");
+            push("/login")
+        }
+    }, [isSuccess, push]);
+
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -102,7 +108,7 @@ const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     </div>
 
                     <button
-                        onClick={() => console.log("logout success")}
+                        onClick={() => logout()}
                         className="border border-red-700 text-red-600 cursor-pointer px-4 py-2 rounded-md hover:bg-red-600 hover:text-white transition"
                     >
                         Logout
