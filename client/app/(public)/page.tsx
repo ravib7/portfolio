@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Building, Building2, CheckCircle, GraduationCap, Menu, X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
 } from "@/redux/apis/public.api";
 
 import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, } from "react-icons/fa";
-import { SiTypescript, SiMongodb, SiExpress, SiNextdotjs, SiTailwindcss, SiRedux, } from "react-icons/si";
+import { SiTypescript, SiMongodb, SiExpress, SiNextdotjs, SiTailwindcss, SiRedux, SiJsonwebtokens, SiBootstrap, SiPostman, SiRender, SiVercel, } from "react-icons/si";
 import { Mail, Phone, MapPin, Calendar, Globe, Briefcase } from "lucide-react";
 import { format } from "date-fns";
 
@@ -68,12 +68,6 @@ const Page = () => {
   }, []);
 
 
-  const roles = [
-    "Frontend Developer",
-    "Backend Developer",
-    "Mobile App Developer",
-  ];
-
   return (
     <div className="bg-[#020617] text-white">
 
@@ -100,19 +94,17 @@ const Page = () => {
               <a
                 key={item}
                 href={`#${item}`}
-                className={`relative group transition ${active === item ? "text-purple-400" : ""
+                className={`relative group transition ${active === item ? "text-[#145EFB]" : "hover:text-[#145EFB]"
                   }`}
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
 
                 {/* UNDERLINE */}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] bg-purple-400 transition-all duration-300
-            ${active === item
-                      ? "w-full"
-                      : "w-0 group-hover:w-full"
-                    }`}
-                ></span>
+                  className={`absolute left-0 -bottom-1 h-[2px] bg-[#145EFB] transition-all duration-300
+                     ${active === item ? "w-full" : "w-0 group-hover:w-full"}
+                `}
+                />
               </a>
             ))}
           </nav>
@@ -143,8 +135,8 @@ const Page = () => {
                 href={`#${item}`}
                 onClick={() => setOpen(false)}
                 className={`${active === item
-                  ? "text-purple-400"
-                  : "text-gray-300"
+                  ? "text-[#145EFB]"
+                  : "text-gray-300 hover:text-[#145EFB]"
                   }`}
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
@@ -416,68 +408,78 @@ const Page = () => {
 
 
       {/* SKILLS */}
-      <section id="skills" className="px-6 md:px-16 py-24 bg-[#020617]">
-        <h2 className="text-4xl font-bold mb-12 text-center">
-          My <span className="text-purple-400">Skills</span>
+      <section id="skills" className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden">
+
+        {/* glow */}
+        <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+          My <span className="text-[#145EFB]">Skills</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-10">
 
           {/* FRONTEND */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-6 text-purple-400">
+          <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+            <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
               Frontend
             </h3>
 
             <div className="space-y-4">
               {skillsFrontend.map((skill) => {
 
-                const iconMap = {
-                  react: <FaReact />,
-                  javascript: <FaJs />,
-                  typescript: <SiTypescript />,
-                  html: <FaHtml5 />,
-                  css: <FaCss3Alt />,
-                  tailwind: <SiTailwindcss />,
-                  redux: <SiRedux />,
-                  next: <SiNextdotjs />,
-                };
+                const getIcon = (name: string) => {
+                  const key = name.toLowerCase();
 
-                const levelColor = {
-                  beginner: "bg-red-500",
-                  intermediate: "bg-yellow-500",
-                  expert: "bg-green-500",
-                };
+                  const map: Record<string, React.ReactNode> = {
+                    html: <FaHtml5 className="text-orange-500" />,
+                    css3: <FaCss3Alt className="text-blue-500" />,
+                    css: <FaCss3Alt className="text-blue-500" />,
+                    javascript: <FaJs className="text-yellow-400" />,
+                    react: <FaReact className="text-cyan-400" />,
+                    "react.js": <FaReact className="text-cyan-400" />,
+                    typescript: <SiTypescript className="text-blue-600" />,
+                    tailwind: <SiTailwindcss className="text-cyan-400" />,
+                    "tailwind css": <SiTailwindcss className="text-cyan-400" />,
+                    redux: <SiRedux className="text-purple-500" />,
+                    "redux toolkit": <SiRedux className="text-purple-500" />,
+                    next: <SiNextdotjs className="text-white" />,
+                    "next.js": <SiNextdotjs className="text-white" />,
+                    bootstrap: <SiBootstrap className="text-purple-600" />,
+                    git: <FaGitAlt className="text-orange-500" />,
+                    postman: <SiPostman className="text-orange-400" />,
+                    render: <SiRender className="text-purple-400" />,
+                    vercel: <SiVercel className="text-white" />,
+                    "rest apis": <Globe className="text-[#145EFB]" />,
+                  };
 
-                const key = skill.skillName.toLowerCase();
-                const level = skill.level?.toLowerCase();
+                  return map[key] ?? <Globe className="text-[#145EFB]" />;
+                };
 
                 return (
                   <div
                     key={skill._id}
-                    className="flex items-center justify-between bg-slate-800 p-3 rounded-lg"
+                    className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
                   >
                     {/* LEFT */}
                     <div className="flex items-center gap-3">
                       <span className="text-xl">
-                        {iconMap[key] || <FaReact />}
+                        {getIcon(skill.skillName)}
                       </span>
-                      <span>{skill.skillName}</span>
+                      <span className="text-white">{skill.skillName}</span>
                     </div>
 
-                    {/* RIGHT LEVEL */}
+                    {/* RIGHT */}
                     <div className="flex items-center gap-2 w-40">
-                      {/* LINE */}
-                      <div className="flex-1 h-[2px] bg-gray-600 relative">
+                      <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
                         <div
-                          className="absolute top-0 left-0 h-[2px] bg-purple-500"
+                          className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
                           style={{ width: `${skill.level}%` }}
                         />
                       </div>
 
-                      {/* NUMBER */}
-                      <span className="text-xs text-gray-400 w-8 text-right">
-                        {skill.level}
+                      <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                        {skill.level}%
                       </span>
                     </div>
                   </div>
@@ -487,56 +489,54 @@ const Page = () => {
           </div>
 
           {/* BACKEND */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-6 text-blue-400">
+          <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+            <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
               Backend
             </h3>
 
             <div className="space-y-4">
               {skillsBackend.map((skill) => {
 
-                const iconMap = {
-                  node: <FaNodeJs />,
-                  express: <SiExpress />,
-                  mongodb: <SiMongodb />,
-                  git: <FaGitAlt />,
-                };
+                const getIcon = (name: string) => {
+                  const key = name.toLowerCase();
 
-                const levelColor = {
-                  beginner: "bg-red-500",
-                  intermediate: "bg-yellow-500",
-                  expert: "bg-green-500",
-                };
+                  const map: Record<string, React.ReactNode> = {
+                    "node.js": <FaNodeJs className="text-green-500" />,
+                    node: <FaNodeJs className="text-green-500" />,
+                    "express.js": <SiExpress className="text-gray-300" />,
+                    express: <SiExpress className="text-gray-300" />,
+                    mongodb: <SiMongodb className="text-green-600" />,
+                    git: <FaGitAlt className="text-orange-500" />,
+                    jsonwebtoken: <SiJsonwebtokens className="text-pink-500" />,
+                  };
 
-                const key = skill.skillName.toLowerCase();
-                const level = skill.level?.toLowerCase();
+                  return map[key] ?? <Globe className="text-[#145EFB]" />;
+                };
 
                 return (
                   <div
                     key={skill._id}
-                    className="flex items-center justify-between bg-slate-800 p-3 rounded-lg"
+                    className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
                   >
                     {/* LEFT */}
                     <div className="flex items-center gap-3">
                       <span className="text-xl">
-                        {iconMap[key] || <FaNodeJs />}
+                        {getIcon(skill.skillName)}
                       </span>
-                      <span>{skill.skillName}</span>
+                      <span className="text-white">{skill.skillName}</span>
                     </div>
 
-                    {/* RIGHT LEVEL */}
+                    {/* RIGHT */}
                     <div className="flex items-center gap-2 w-40">
-                      {/* LINE */}
-                      <div className="flex-1 h-[2px] bg-gray-600 relative">
+                      <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
                         <div
-                          className="absolute top-0 left-0 h-[2px] bg-purple-500"
+                          className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
                           style={{ width: `${skill.level}%` }}
                         />
                       </div>
 
-                      {/* NUMBER */}
-                      <span className="text-xs text-gray-400 w-8 text-right">
-                        {skill.level}
+                      <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                        {skill.level}%
                       </span>
                     </div>
                   </div>
@@ -548,33 +548,65 @@ const Page = () => {
         </div>
       </section>
 
+
       {/* EDUCATION */}
-      <section id="education" className="px-6 md:px-16 py-24 bg-[#020617]">
-        <h2 className="text-4xl font-bold mb-12 text-center">
-          My <span className="text-purple-400">Education</span>
+      <section
+        id="education"
+        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+      >
+
+        {/* glow */}
+        <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+        {/* heading */}
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+          My <span className="text-[#145EFB]">Education</span>
         </h2>
 
-        <div className="relative border-l border-slate-700 pl-6 space-y-10">
+        {/* timeline */}
+        <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
 
           {education.map((edu) => (
-            <div key={edu._id} className="relative">
+            <div key={edu._id} className="relative group">
+
+              {/* DOT with icon */}
+              <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
+          bg-[#020617] border border-[#145EFB] 
+          flex items-center justify-center
+          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
+                <GraduationCap size={14} className="text-[#145EFB]" />
+              </div>
 
               {/* CARD */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-2">
+              <div
+                className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
+          hover:border-[#145EFB]/40
+          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
+          transition duration-300"
+              >
 
                 {/* DEGREE */}
-                <h3 className="text-lg font-semibold">
-                  {edu.degree}{" "}
-                  <span className="text-blue-400">({edu.field})</span>
-                </h3>
+                <div className="flex items-center gap-2">
+                  <GraduationCap size={18} className="text-[#145EFB]" />
+                  <h3 className="text-lg font-semibold text-white transition">
+                    {edu.degree}
+                    <span className="text-[#145EFB] ml-1">({edu.field})</span>
+                  </h3>
+                </div>
 
                 {/* COLLEGE */}
-                <p className="text-gray-300">{edu.college}</p>
+                <div className="flex items-center gap-2 text-[#CBD5E1]">
+                  <Building size={16} className="text-[#145EFB]" />
+                  <p>{edu.college}</p>
+                </div>
 
                 {/* YEAR */}
-                <p className="text-sm text-gray-400">
-                  {edu.startYear} - {edu.endYear}
-                </p>
+                <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
+                  <Calendar size={16} className="text-[#145EFB]" />
+                  <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
+                    {edu.startYear} - {edu.endYear}
+                  </span>
+                </div>
 
               </div>
             </div>
@@ -583,42 +615,80 @@ const Page = () => {
         </div>
       </section>
 
+
       {/* EXPERIENCE */}
-      <section id="experience" className="px-6 md:px-16 py-24 bg-[#020617]">
-        <h2 className="text-4xl font-bold mb-12 text-center">
-          My <span className="text-purple-400">Experience</span>
+      <section
+        id="experience"
+        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+      >
+
+        {/* glow */}
+        <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+        {/* heading */}
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+          My <span className="text-[#145EFB]">Experience</span>
         </h2>
 
-        <div className="relative border-l border-slate-700 pl-6 space-y-10">
+        {/* timeline */}
+        <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
 
           {experience.map((exp) => (
-            <div key={exp._id} className="relative">
+            <div key={exp._id} className="relative group">
+
+              {/* DOT with icon */}
+              <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
+          bg-[#020617] border border-[#145EFB] 
+          flex items-center justify-center
+          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
+                <Briefcase size={14} className="text-[#145EFB]" />
+              </div>
 
               {/* CARD */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-3">
+              <div
+                className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
+          hover:border-[#145EFB]/40
+          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
+          transition duration-300"
+              >
 
                 {/* ROLE + COMPANY */}
-                <h3 className="text-lg font-semibold">
-                  {exp.role} <span className="text-purple-400">@ {exp.company}</span>
-                </h3>
+                <div className="flex items-center gap-2">
+                  <Briefcase size={18} className="text-[#145EFB]" />
+                  <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
+                    {exp.role}
+                  </h3>
+                </div>
+
+                {/* COMPANY NAME */}
+                <div className="flex items-center gap-2 text-[#CBD5E1]">
+                  <Building2 size={16} className="text-[#145EFB]" />
+                  <p>{exp.company}</p>
+                </div>
 
                 {/* DATE */}
-                <p className="text-sm text-gray-400">
-                  {new Date(exp.startDate).toLocaleDateString()} -{" "}
-                  {exp.endDate
-                    ? new Date(exp.endDate).toLocaleDateString()
-                    : "Present"}
-                </p>
+                <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
+                  <Calendar size={16} className="text-[#145EFB]" />
+                  <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
+                    {format(new Date(exp.startDate), "MMM yyyy")} -{" "}
+                    {exp.endDate ? format(new Date(exp.endDate), "MMM yyyy") : "Present"}
+                  </span>
+                </div>
 
                 {/* DESCRIPTION */}
                 {exp.description && (
-                  <p className="text-gray-300">{exp.description}</p>
+                  <p className="text-[#CBD5E1] leading-relaxed">
+                    {exp.description}
+                  </p>
                 )}
 
                 {/* RESPONSIBILITIES */}
-                <ul className="list-disc ml-5 text-sm text-gray-300 space-y-1">
+                <ul className="space-y-2 text-sm text-[#CBD5E1]">
                   {exp.responsibilities.map((item, i) => (
-                    <li key={i}>{item}</li>
+                    <li key={i} className="flex items-start gap-2">
+                      <CheckCircle size={14} className="text-[#145EFB] mt-1" />
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
 
@@ -627,12 +697,21 @@ const Page = () => {
           ))}
 
         </div>
-      </section>
+      </section >
+
 
       {/* CONTACT */}
-      <section id="contact" className="px-6 md:px-16 py-24 bg-[#020617]">
-        <h2 className="text-4xl font-bold mb-12 text-center">
-          Get In <span className="text-purple-400">Touch</span>
+      <section
+        id="contact"
+        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+      >
+
+        {/* glow */}
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+        {/* heading */}
+        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+          Get In <span className="text-[#145EFB]">Touch</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -641,29 +720,32 @@ const Page = () => {
           <div className="space-y-8">
 
             <div>
-              <h3 className="text-2xl font-semibold mb-3">
+              <h3 className="text-2xl font-semibold mb-3 text-white">
                 Let’s build something amazing 🚀
               </h3>
-              <p className="text-gray-400">
+              <p className="text-[#CBD5E1]">
                 I’m open to freelance, full-time roles, and collaborations.
               </p>
             </div>
 
             <div className="space-y-4">
 
-              <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span className="text-purple-400 text-xl">📍</span>
-                <p>{about?.location}</p>
+              {/* LOCATION */}
+              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+                <MapPin className="text-[#145EFB]" />
+                <p className="text-white">{about?.location}</p>
               </div>
 
-              <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span className="text-blue-400 text-xl">📧</span>
-                <p>{about?.email}</p>
+              {/* EMAIL */}
+              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+                <Mail className="text-[#145EFB]" />
+                <p className="text-white break-all">{about?.email}</p>
               </div>
 
-              <div className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span className="text-green-400 text-xl">📞</span>
-                <p>{about?.phone}</p>
+              {/* PHONE */}
+              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+                <Phone className="text-[#145EFB]" />
+                <p className="text-white">{about?.phone}</p>
               </div>
 
             </div>
@@ -672,26 +754,27 @@ const Page = () => {
           {/* RIGHT SIDE FORM */}
           <div className="relative">
 
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 blur-2xl opacity-20 rounded-2xl"></div>
+            {/* glow */}
+            <div className="absolute inset-0 bg-[#145EFB]/20 blur-2xl opacity-20 rounded-2xl"></div>
 
-            <div className="relative bg-slate-900 border border-slate-800 rounded-2xl p-8 space-y-5">
+            <div className="relative bg-[#020617] border border-[#1E293B] rounded-2xl p-8 space-y-5">
 
               <Input
                 placeholder="Your Name"
-                className="bg-slate-800 border-slate-700 h-12"
+                className="bg-[#0B0F19] border-[#1E293B] h-12 text-white placeholder:text-[#CBD5E1]"
               />
 
               <Input
                 placeholder="Your Email"
-                className="bg-slate-800 border-slate-700 h-12"
+                className="bg-[#0B0F19] border-[#1E293B] h-12 text-white placeholder:text-[#CBD5E1]"
               />
 
               <Textarea
                 placeholder="Your Message"
-                className="bg-slate-800 border-slate-700 min-h-[120px]"
+                className="bg-[#0B0F19] border-[#1E293B] min-h-[120px] text-white placeholder:text-[#CBD5E1]"
               />
 
-              <Button className="w-full h-12 bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90">
+              <Button className="w-full h-12 bg-[#145EFB] hover:bg-[#0F4FD1] text-white transition shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.6)] cursor-pointer">
                 Send Message
               </Button>
 
@@ -701,7 +784,7 @@ const Page = () => {
         </div>
       </section>
 
-    </div>
+    </div >
   );
 };
 
