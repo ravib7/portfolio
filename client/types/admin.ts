@@ -134,7 +134,7 @@ export type ABOUT = {
 
 export type READ_ABOUT_INFO_RESPONSE = {
     message: string,
-    result: ABOUT[]
+    result: ABOUT | null
 }
 
 export type ADD_ABOUT_REQUEST = {

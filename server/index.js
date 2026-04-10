@@ -12,6 +12,7 @@ app.use(cors({ origin: FRONTEND_URL, credentials: true }))
 app.use(cookieParser())
 
 app.use("/api/auth", require("./routes/user.routes.js"))
+app.use("/api/public", require("./routes/public.routes.js"))
 app.use("/api/admin", adminProtected, require("./routes/admin.routes.js"))
 
 app.use((req, res) => {

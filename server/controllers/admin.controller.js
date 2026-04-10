@@ -217,7 +217,7 @@ exports.addAboutInfo = asyncHandler(async (req, res) => {
 })
 
 exports.ReadAboutInfo = asyncHandler(async (req, res) => {
-    const result = await About.find()
+    const result = await About.findOne()
     res.json({ message: "About Information Fetch Successfully", result })
 })
 
