@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Building, Building2, CheckCircle, GraduationCap, Menu, X } from "lucide-react";
+import { Building, Building2, CheckCircle, Code2, FolderOpen, GraduationCap, Menu, X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,12 +18,13 @@ import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, } from "react-ic
 import { SiTypescript, SiMongodb, SiExpress, SiNextdotjs, SiTailwindcss, SiRedux, SiJsonwebtokens, SiBootstrap, SiPostman, SiRender, SiVercel, } from "react-icons/si";
 import { Mail, Phone, MapPin, Calendar, Globe, Briefcase } from "lucide-react";
 import { format } from "date-fns";
+import { motion } from "framer-motion"
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const Page = () => {
-  const [active, setActive] = useState("hero");
+  const [active, setActive] = useState("home");
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState("projects");
-
+  const [activeTab, setActiveTab] = useState("projects")
 
   const { data: skillsData } = useGetPublicSkillsQuery();
   const { data: experienceData } = useGetPublicExperienceQuery();
@@ -40,11 +41,9 @@ const Page = () => {
 
   useEffect(() => {
     const sections = [
-      "hero",
+      "home",
       "about",
       "projects",
-      "skills",
-      "experience",
       "education",
       "contact",
     ];
@@ -83,11 +82,9 @@ const Page = () => {
           {/* DESKTOP MENU */}
           <nav className="hidden md:flex gap-8 text-gray-300">
             {[
-              "hero",
+              "home",
               "about",
               "projects",
-              "skills",
-              "experience",
               "education",
               "contact",
             ].map((item) => (
@@ -109,6 +106,8 @@ const Page = () => {
             ))}
           </nav>
 
+          <ThemeToggle />
+
           {/* MOBILE BUTTON */}
           <button
             className="md:hidden text-white"
@@ -122,11 +121,9 @@ const Page = () => {
         {open && (
           <div className="md:hidden px-6 pb-6 flex flex-col gap-4 bg-black/90 backdrop-blur-md">
             {[
-              "hero",
+              "home",
               "about",
               "projects",
-              "skills",
-              "experience",
               "education",
               "contact",
             ].map((item) => (
@@ -146,9 +143,10 @@ const Page = () => {
         )}
       </header>
 
+
       {/* HERO */}
       <section
-        id="hero"
+        id="home"
         className="min-h-screen pt-24 flex items-center justify-between px-6 md:px-16 relative overflow-hidden bg-[#0B0F19]"
       >
         {/* background glow */}
@@ -205,7 +203,7 @@ const Page = () => {
       {/* ABOUT */}
       <section
         id="about"
-        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+        className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
       >
         {/* background glow */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
@@ -308,251 +306,369 @@ const Page = () => {
       </section>
 
 
-      {/* PROJECTS */}
-      <section
-        id="projects"
-        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
-      >
-        {/* background glow */}
-        <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
-
-        {/* heading */}
-        <h2 className="text-4xl font-bold mb-16 text-center text-white">
-          My <span className="text-[#145EFB]">Projects</span>
+      {/* SHOWCASE */}
+      <div className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden">
+        <h2 className="text-4xl font-bold text-center mb-6 text-white">
+          Portfolio <span className="text-[#145EFB]">Showcase</span>
         </h2>
 
-        {/* grid */}
-        <div className="grid md:grid-cols-3 gap-10 items-stretch">
+        <p className="text-center text-[#94A3B8] mb-10">
+          Explore my work, skills, and experience
+        </p>
 
-          {projects.map((proj) => (
-            <div
-              key={proj._id}
-              className="group relative rounded-xl overflow-hidden 
+        <div className="flex justify-center gap-5">
+
+          {[
+            { key: "projects", label: "Projects", icon: FolderOpen },
+            { key: "skills", label: "Skills", icon: Code2 },
+            { key: "experience", label: "Experience", icon: Briefcase },
+          ].map((tab) => {
+            const Icon = tab.icon;
+
+            return (
+              <motion.button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                animate={{
+                  backgroundColor: activeTab === tab.key ? "#145EFB" : "#0B0F19",
+                  borderColor: activeTab === tab.key ? "#145EFB" : "#1E293B",
+                  color: "#ffffff",
+                }}
+                transition={{ duration: 0.35, ease: "easeInOut" }}
+                className="flex items-center gap-3 px-8 py-4 rounded-xl border text-sm font-medium shadow-md cursor-pointer"
+              >
+                <Icon size={18} />
+                {tab.label}
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+
+
+      {/* PROJECTS */}
+      {activeTab === "projects" && (
+        <section
+          id="projects"
+          className="px-6 md:px-16 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden"
+        >
+          {/* background glow */}
+          <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+          {/* grid */}
+          <div className="grid md:grid-cols-3 gap-10 items-stretch">
+
+            {projects.map((proj) => (
+              <div
+                key={proj._id}
+                className="group relative rounded-xl overflow-hidden 
         border border-[#1E293B] 
         bg-[#020617]/80 backdrop-blur-sm
         hover:-translate-y-3
         hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]
         transition duration-300 flex flex-col h-full"
-            >
+              >
 
-              {/* TOP ACCENT LINE */}
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#145EFB] to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+                {/* TOP ACCENT LINE */}
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#145EFB] to-transparent opacity-0 group-hover:opacity-100 transition"></div>
 
-              {/* IMAGE */}
-              <div className="h-60 overflow-hidden relative">
-                <img
-                  src={proj.imageURL}
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                />
+                {/* IMAGE */}
+                <div className="h-60 overflow-hidden relative">
+                  <img
+                    src={proj.imageURL}
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                  />
 
-                {/* overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              </div>
+                  {/* overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                </div>
 
-              {/* CONTENT */}
-              <div className="p-5 flex flex-col h-full">
+                {/* CONTENT */}
+                <div className="p-5 flex flex-col h-full">
 
-                {/* TOP CONTENT */}
-                <div className="space-y-3 flex-1">
+                  {/* TOP CONTENT */}
+                  <div className="space-y-3 flex-1">
 
-                  <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
-                    {proj.title}
-                  </h3>
+                    <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
+                      {proj.title}
+                    </h3>
 
-                  {/* ✅ FULL DESCRIPTION (NO CLAMP) */}
-                  <p className="text-sm text-[#CBD5E1] leading-relaxed">
-                    {proj.description}
-                  </p>
+                    {/* ✅ FULL DESCRIPTION (NO CLAMP) */}
+                    <p className="text-sm text-[#CBD5E1] leading-relaxed">
+                      {proj.description}
+                    </p>
 
-                  {/* TECH STACK */}
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {proj.technologies.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="text-xs bg-[#0B0F19] border border-[#1E293B] px-2 py-1 rounded text-[#CBD5E1] group-hover:border-[#145EFB]/40 transition"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {/* TECH STACK */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {proj.technologies.map((tech, i) => (
+                        <span
+                          key={i}
+                          className="text-xs bg-[#0B0F19] border border-[#1E293B] px-2 py-1 rounded text-[#CBD5E1] group-hover:border-[#145EFB]/40 transition"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                  </div>
+
+                  {/* BUTTONS (ALWAYS BOTTOM) */}
+                  <div className="flex gap-3 pt-1 mt-auto">
+
+                    {proj.liveURL && (
+                      <a href={proj.liveURL} target="_blank">
+                        <button className="bg-[#145EFB] hover:bg-[#0F4FD1] text-white text-sm px-4 py-1.5 rounded transition shadow-md hover:shadow-[0_0_10px_rgba(20,94,251,0.6)] cursor-pointer">
+                          Live
+                        </button>
+                      </a>
+                    )}
+
+                    {proj.gitHubURL && (
+                      <a href={proj.gitHubURL} target="_blank">
+                        <button className="border border-[#1E293B] text-white text-sm px-4 py-1.5 rounded hover:bg-[#0B0F19] hover:border-[#145EFB] transition cursor-pointer">
+                          Code
+                        </button>
+                      </a>
+                    )}
+
                   </div>
 
                 </div>
-
-                {/* BUTTONS (ALWAYS BOTTOM) */}
-                <div className="flex gap-3 pt-1 mt-auto">
-
-                  {proj.liveURL && (
-                    <a href={proj.liveURL} target="_blank">
-                      <button className="bg-[#145EFB] hover:bg-[#0F4FD1] text-white text-sm px-4 py-1.5 rounded transition shadow-md hover:shadow-[0_0_10px_rgba(20,94,251,0.6)] cursor-pointer">
-                        Live
-                      </button>
-                    </a>
-                  )}
-
-                  {proj.gitHubURL && (
-                    <a href={proj.gitHubURL} target="_blank">
-                      <button className="border border-[#1E293B] text-white text-sm px-4 py-1.5 rounded hover:bg-[#0B0F19] hover:border-[#145EFB] transition cursor-pointer">
-                        Code
-                      </button>
-                    </a>
-                  )}
-
-                </div>
-
               </div>
-            </div>
-          ))}
+            ))}
 
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
 
       {/* SKILLS */}
-      <section id="skills" className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden">
+      {activeTab === "skills" && (
+        <section id="skills" className="px-6 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden">
 
-        {/* glow */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+          {/* glow */}
+          <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
 
-        <h2 className="text-4xl font-bold mb-16 text-center text-white">
-          My <span className="text-[#145EFB]">Skills</span>
-        </h2>
+          <div className="grid md:grid-cols-2 gap-10">
 
-        <div className="grid md:grid-cols-2 gap-10">
+            {/* FRONTEND */}
+            <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+              <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
+                Frontend
+              </h3>
 
-          {/* FRONTEND */}
-          <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
-              Frontend
-            </h3>
+              <div className="space-y-4">
+                {skillsFrontend.map((skill) => {
 
-            <div className="space-y-4">
-              {skillsFrontend.map((skill) => {
+                  const getIcon = (name: string) => {
+                    const key = name.toLowerCase();
 
-                const getIcon = (name: string) => {
-                  const key = name.toLowerCase();
+                    const map: Record<string, React.ReactNode> = {
+                      html: <FaHtml5 className="text-orange-500" />,
+                      css3: <FaCss3Alt className="text-blue-500" />,
+                      css: <FaCss3Alt className="text-blue-500" />,
+                      javascript: <FaJs className="text-yellow-400" />,
+                      react: <FaReact className="text-cyan-400" />,
+                      "react.js": <FaReact className="text-cyan-400" />,
+                      typescript: <SiTypescript className="text-blue-600" />,
+                      tailwind: <SiTailwindcss className="text-cyan-400" />,
+                      "tailwind css": <SiTailwindcss className="text-cyan-400" />,
+                      redux: <SiRedux className="text-purple-500" />,
+                      "redux toolkit": <SiRedux className="text-purple-500" />,
+                      next: <SiNextdotjs className="text-white" />,
+                      "next.js": <SiNextdotjs className="text-white" />,
+                      bootstrap: <SiBootstrap className="text-purple-600" />,
+                      git: <FaGitAlt className="text-orange-500" />,
+                      postman: <SiPostman className="text-orange-400" />,
+                      render: <SiRender className="text-purple-400" />,
+                      vercel: <SiVercel className="text-white" />,
+                      "rest apis": <Globe className="text-[#145EFB]" />,
+                    };
 
-                  const map: Record<string, React.ReactNode> = {
-                    html: <FaHtml5 className="text-orange-500" />,
-                    css3: <FaCss3Alt className="text-blue-500" />,
-                    css: <FaCss3Alt className="text-blue-500" />,
-                    javascript: <FaJs className="text-yellow-400" />,
-                    react: <FaReact className="text-cyan-400" />,
-                    "react.js": <FaReact className="text-cyan-400" />,
-                    typescript: <SiTypescript className="text-blue-600" />,
-                    tailwind: <SiTailwindcss className="text-cyan-400" />,
-                    "tailwind css": <SiTailwindcss className="text-cyan-400" />,
-                    redux: <SiRedux className="text-purple-500" />,
-                    "redux toolkit": <SiRedux className="text-purple-500" />,
-                    next: <SiNextdotjs className="text-white" />,
-                    "next.js": <SiNextdotjs className="text-white" />,
-                    bootstrap: <SiBootstrap className="text-purple-600" />,
-                    git: <FaGitAlt className="text-orange-500" />,
-                    postman: <SiPostman className="text-orange-400" />,
-                    render: <SiRender className="text-purple-400" />,
-                    vercel: <SiVercel className="text-white" />,
-                    "rest apis": <Globe className="text-[#145EFB]" />,
+                    return map[key] ?? <Globe className="text-[#145EFB]" />;
                   };
 
-                  return map[key] ?? <Globe className="text-[#145EFB]" />;
-                };
-
-                return (
-                  <div
-                    key={skill._id}
-                    className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
-                  >
-                    {/* LEFT */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">
-                        {getIcon(skill.skillName)}
-                      </span>
-                      <span className="text-white">{skill.skillName}</span>
-                    </div>
-
-                    {/* RIGHT */}
-                    <div className="flex items-center gap-2 w-40">
-                      <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
-                        <div
-                          className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
-                          style={{ width: `${skill.level}%` }}
-                        />
+                  return (
+                    <div
+                      key={skill._id}
+                      className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
+                    >
+                      {/* LEFT */}
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">
+                          {getIcon(skill.skillName)}
+                        </span>
+                        <span className="text-white">{skill.skillName}</span>
                       </div>
 
-                      <span className="text-xs text-[#CBD5E1] w-8 text-right">
-                        {skill.level}%
-                      </span>
+                      {/* RIGHT */}
+                      <div className="flex items-center gap-2 w-40">
+                        <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
+                          <div
+                            className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
+                            style={{ width: `${skill.level}%` }}
+                          />
+                        </div>
+
+                        <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                          {skill.level}%
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          {/* BACKEND */}
-          <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
-              Backend
-            </h3>
+            {/* BACKEND */}
+            <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+              <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
+                Backend
+              </h3>
 
-            <div className="space-y-4">
-              {skillsBackend.map((skill) => {
+              <div className="space-y-4">
+                {skillsBackend.map((skill) => {
 
-                const getIcon = (name: string) => {
-                  const key = name.toLowerCase();
+                  const getIcon = (name: string) => {
+                    const key = name.toLowerCase();
 
-                  const map: Record<string, React.ReactNode> = {
-                    "node.js": <FaNodeJs className="text-green-500" />,
-                    node: <FaNodeJs className="text-green-500" />,
-                    "express.js": <SiExpress className="text-gray-300" />,
-                    express: <SiExpress className="text-gray-300" />,
-                    mongodb: <SiMongodb className="text-green-600" />,
-                    git: <FaGitAlt className="text-orange-500" />,
-                    jsonwebtoken: <SiJsonwebtokens className="text-pink-500" />,
+                    const map: Record<string, React.ReactNode> = {
+                      "node.js": <FaNodeJs className="text-green-500" />,
+                      node: <FaNodeJs className="text-green-500" />,
+                      "express.js": <SiExpress className="text-gray-300" />,
+                      express: <SiExpress className="text-gray-300" />,
+                      mongodb: <SiMongodb className="text-green-600" />,
+                      git: <FaGitAlt className="text-orange-500" />,
+                      jsonwebtoken: <SiJsonwebtokens className="text-pink-500" />,
+                    };
+
+                    return map[key] ?? <Globe className="text-[#145EFB]" />;
                   };
 
-                  return map[key] ?? <Globe className="text-[#145EFB]" />;
-                };
-
-                return (
-                  <div
-                    key={skill._id}
-                    className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
-                  >
-                    {/* LEFT */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">
-                        {getIcon(skill.skillName)}
-                      </span>
-                      <span className="text-white">{skill.skillName}</span>
-                    </div>
-
-                    {/* RIGHT */}
-                    <div className="flex items-center gap-2 w-40">
-                      <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
-                        <div
-                          className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
-                          style={{ width: `${skill.level}%` }}
-                        />
+                  return (
+                    <div
+                      key={skill._id}
+                      className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
+                    >
+                      {/* LEFT */}
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">
+                          {getIcon(skill.skillName)}
+                        </span>
+                        <span className="text-white">{skill.skillName}</span>
                       </div>
 
-                      <span className="text-xs text-[#CBD5E1] w-8 text-right">
-                        {skill.level}%
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+                      {/* RIGHT */}
+                      <div className="flex items-center gap-2 w-40">
+                        <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
+                          <div
+                            className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
+                            style={{ width: `${skill.level}%` }}
+                          />
+                        </div>
 
-        </div>
-      </section>
+                        <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                          {skill.level}%
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+          </div>
+        </section>
+      )}
+
+
+      {/* EXPERIENCE */}
+      {activeTab === "experience" && (
+        <section
+          id="experience"
+          className="px-6 md:px-16 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden"
+        >
+
+          {/* glow */}
+          <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+
+          {/* timeline */}
+          <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
+
+            {experience.map((exp) => (
+              <div key={exp._id} className="relative group">
+
+                {/* DOT with icon */}
+                <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
+          bg-[#020617] border border-[#145EFB] 
+          flex items-center justify-center
+          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
+                  <Briefcase size={14} className="text-[#145EFB]" />
+                </div>
+
+                {/* CARD */}
+                <div
+                  className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
+          hover:border-[#145EFB]/40
+          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
+          transition duration-300"
+                >
+
+                  {/* ROLE + COMPANY */}
+                  <div className="flex items-center gap-2">
+                    <Briefcase size={18} className="text-[#145EFB]" />
+                    <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
+                      {exp.role}
+                    </h3>
+                  </div>
+
+                  {/* COMPANY NAME */}
+                  <div className="flex items-center gap-2 text-[#CBD5E1]">
+                    <Building2 size={16} className="text-[#145EFB]" />
+                    <p>{exp.company}</p>
+                  </div>
+
+                  {/* DATE */}
+                  <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
+                    <Calendar size={16} className="text-[#145EFB]" />
+                    <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
+                      {format(new Date(exp.startDate), "MMM yyyy")} -{" "}
+                      {exp.endDate ? format(new Date(exp.endDate), "MMM yyyy") : "Present"}
+                    </span>
+                  </div>
+
+                  {/* DESCRIPTION */}
+                  {exp.description && (
+                    <p className="text-[#CBD5E1] leading-relaxed">
+                      {exp.description}
+                    </p>
+                  )}
+
+                  {/* RESPONSIBILITIES */}
+                  <ul className="space-y-2 text-sm text-[#CBD5E1]">
+                    {exp.responsibilities.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle size={14} className="text-[#145EFB] mt-1" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                </div>
+              </div>
+            ))}
+
+          </div>
+        </section >
+      )}
 
 
       {/* EDUCATION */}
       <section
         id="education"
-        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+        className="px-6 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
       >
 
         {/* glow */}
@@ -616,94 +732,10 @@ const Page = () => {
       </section>
 
 
-      {/* EXPERIENCE */}
-      <section
-        id="experience"
-        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
-      >
-
-        {/* glow */}
-        <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
-
-        {/* heading */}
-        <h2 className="text-4xl font-bold mb-16 text-center text-white">
-          My <span className="text-[#145EFB]">Experience</span>
-        </h2>
-
-        {/* timeline */}
-        <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
-
-          {experience.map((exp) => (
-            <div key={exp._id} className="relative group">
-
-              {/* DOT with icon */}
-              <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
-          bg-[#020617] border border-[#145EFB] 
-          flex items-center justify-center
-          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
-                <Briefcase size={14} className="text-[#145EFB]" />
-              </div>
-
-              {/* CARD */}
-              <div
-                className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
-          hover:border-[#145EFB]/40
-          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
-          transition duration-300"
-              >
-
-                {/* ROLE + COMPANY */}
-                <div className="flex items-center gap-2">
-                  <Briefcase size={18} className="text-[#145EFB]" />
-                  <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
-                    {exp.role}
-                  </h3>
-                </div>
-
-                {/* COMPANY NAME */}
-                <div className="flex items-center gap-2 text-[#CBD5E1]">
-                  <Building2 size={16} className="text-[#145EFB]" />
-                  <p>{exp.company}</p>
-                </div>
-
-                {/* DATE */}
-                <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
-                  <Calendar size={16} className="text-[#145EFB]" />
-                  <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
-                    {format(new Date(exp.startDate), "MMM yyyy")} -{" "}
-                    {exp.endDate ? format(new Date(exp.endDate), "MMM yyyy") : "Present"}
-                  </span>
-                </div>
-
-                {/* DESCRIPTION */}
-                {exp.description && (
-                  <p className="text-[#CBD5E1] leading-relaxed">
-                    {exp.description}
-                  </p>
-                )}
-
-                {/* RESPONSIBILITIES */}
-                <ul className="space-y-2 text-sm text-[#CBD5E1]">
-                  {exp.responsibilities.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle size={14} className="text-[#145EFB] mt-1" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-              </div>
-            </div>
-          ))}
-
-        </div>
-      </section >
-
-
       {/* CONTACT */}
       <section
         id="contact"
-        className="px-6 md:px-16 py-24 bg-[#0B0F19] relative overflow-hidden"
+        className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
       >
 
         {/* glow */}

@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/ReduxProvider";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "@/components/ui/sonner";
+import ModeProvider from "@/components/theme/ThemeProvider";
 
 
 const geistSans = Geist({
@@ -31,10 +32,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReduxProvider>
-          <Toaster richColors position="top-right" />
-          {children}
-        </ReduxProvider>
+        <ModeProvider>
+          <ReduxProvider>
+            <Toaster richColors position="top-right" />
+            {children}
+          </ReduxProvider>
+        </ModeProvider>
       </body>
     </html>
   );
