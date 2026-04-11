@@ -6,7 +6,7 @@ const ModeProvider = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider
             defaultTheme='dark'
             attribute="class"
-            enableSystem={true}
+            enableSystem={false}
             disableTransitionOnChange={true}
         >
             {children}

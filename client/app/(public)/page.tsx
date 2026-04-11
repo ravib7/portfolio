@@ -20,6 +20,7 @@ import { Mail, Phone, MapPin, Calendar, Globe, Briefcase } from "lucide-react";
 import { format } from "date-fns";
 import { motion } from "framer-motion"
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useAppTheme } from "@/components/hooks/useAppTheme";
 
 const Page = () => {
   const [active, setActive] = useState("home");
@@ -38,6 +39,9 @@ const Page = () => {
   const projects = projectData?.result || [];
   const education = educationData?.result || [];
   const about = aboutData?.result;
+
+  const { theme, isDark } = useAppTheme();
+
 
   useEffect(() => {
     const sections = [
@@ -68,49 +72,51 @@ const Page = () => {
 
 
   return (
-    <div className="bg-[#020617] text-white">
+    // <div className="bg-[#020617] text-white">
+    <div className={`${theme.background} ${theme.text}`}>
 
       {/* NAVBAR */}
-      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-white/5 border-b border-white/10">
+      <header
+        className={`fixed top-0 w-full z-50 backdrop-blur-md border-b ${theme.border} ${theme.background}/80`}
+      >
         <div className="flex justify-between items-center px-6 md:px-16 py-4">
 
           {/* LOGO */}
-          <h1 className="text-xl font-bold text-white">
-            {about?.name || "Portfolio"}
+          <h1 className={`text-xl font-bold ${theme.text}`}>
+            RC
           </h1>
 
           {/* DESKTOP MENU */}
-          <nav className="hidden md:flex gap-8 text-gray-300">
-            {[
-              "home",
-              "about",
-              "projects",
-              "education",
-              "contact",
-            ].map((item) => (
+          <nav className={`hidden md:flex gap-8 ${theme.text}`}>
+            {["home", "about", "projects", "education", "contact"].map((item) => (
               <a
                 key={item}
                 href={`#${item}`}
-                className={`relative group transition ${active === item ? "text-[#145EFB]" : "hover:text-[#145EFB]"
-                  }`}
+                className="relative group transition"
+                style={{
+                  color: active === item ? theme.primary : undefined,
+                }}
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
 
                 {/* UNDERLINE */}
                 <span
-                  className={`absolute left-0 -bottom-1 h-[2px] bg-[#145EFB] transition-all duration-300
-                     ${active === item ? "w-full" : "w-0 group-hover:w-full"}
-                `}
+                  className="absolute left-0 -bottom-1 h-[2px] transition-all duration-300"
+                  style={{
+                    backgroundColor: theme.primary,
+                    width: active === item ? "100%" : "0%",
+                  }}
                 />
               </a>
             ))}
           </nav>
 
+          {/* TOGGLE */}
           <ThemeToggle />
 
           {/* MOBILE BUTTON */}
           <button
-            className="md:hidden text-white"
+            className={`md:hidden ${theme.text}`}
             onClick={() => setOpen(!open)}
           >
             {open ? <X /> : <Menu />}
@@ -119,22 +125,18 @@ const Page = () => {
 
         {/* MOBILE MENU */}
         {open && (
-          <div className="md:hidden px-6 pb-6 flex flex-col gap-4 bg-black/90 backdrop-blur-md">
-            {[
-              "home",
-              "about",
-              "projects",
-              "education",
-              "contact",
-            ].map((item) => (
+          <div
+            className={`md:hidden px-6 pb-6 flex flex-col gap-4 border-t ${theme.border} ${theme.background}`}
+          >
+            {["home", "about", "projects", "education", "contact"].map((item) => (
               <a
                 key={item}
                 href={`#${item}`}
                 onClick={() => setOpen(false)}
-                className={`${active === item
-                  ? "text-[#145EFB]"
-                  : "text-gray-300 hover:text-[#145EFB]"
-                  }`}
+                className="transition"
+                style={{
+                  color: active === item ? theme.primary : theme.text,
+                }}
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </a>
@@ -147,38 +149,52 @@ const Page = () => {
       {/* HERO */}
       <section
         id="home"
-        className="min-h-screen pt-24 flex items-center justify-between px-6 md:px-16 relative overflow-hidden bg-[#0B0F19]"
+        className={`min-h-screen pt-24 flex items-center justify-between px-6 md:px-16 relative overflow-hidden ${theme.background}`}
       >
         {/* background glow */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#145EFB]/20 blur-3xl rounded-full"></div>
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+        <div
+          className="absolute top-20 left-10 w-72 h-72 blur-3xl rounded-full"
+          style={{ backgroundColor: theme.primary, opacity: 0.2 }}
+        />
+
+        <div
+          className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full"
+          style={{ backgroundColor: theme.primary, opacity: 0.1 }}
+        />
 
         {/* LEFT CONTENT */}
         <div className="max-w-2xl space-y-6 z-10">
-          <h1 className="text-5xl md:text-6xl font-semibold leading-tight text-white">
+          <h1 className={`text-5xl md:text-6xl font-semibold leading-tight ${theme.text}`}>
             Hi, I'm{" "}
-            <span className="text-[#145EFB]">
+            <span style={{ color: theme.primary }}>
               {about?.name}
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-[#CBD5E1]">
+          <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8 }}>
             {about?.title}
           </p>
 
-          <p className="text-[#94A3B8] max-w-lg leading-relaxed">
+          <p className={`${theme.text}`} style={{ opacity: 0.6, maxWidth: "32rem" }}>
             {about?.introduction}
           </p>
 
           {/* buttons */}
           <div className="flex gap-4 pt-2">
-            <Button className="bg-[#145EFB] hover:bg-[#0F4FD1] text-white px-6 py-2 rounded-md transition cursor-pointer">
+            <Button
+              className="text-white transition cursor-pointer p-4"
+              style={{ backgroundColor: theme.primary }}
+            >
               Contact Me
             </Button>
 
             <Button
               variant="outline"
-              className="border border-[#145EFB] text-[#145EFB] hover:bg-[#145EFB] hover:text-white px-6 py-2 rounded-md transition cursor-pointer"
+              className={`cursor-pointer border transition`}
+              style={{
+                borderColor: theme.primary,
+                color: theme.primary,
+              }}
             >
               Download CV
             </Button>
@@ -187,12 +203,16 @@ const Page = () => {
 
         {/* RIGHT IMAGE */}
         <div className="hidden md:flex justify-center items-center">
-          <Avatar className="w-80 h-80 border border-[#1E293B]">
+          <Avatar
+            className="w-80 h-80"
+            style={{ border: `1px solid ${theme.border}` }}
+          >
             <AvatarImage
               src={about?.profileImage}
               className="object-top"
             />
-            <AvatarFallback className="bg-[#0B0F19] text-white">
+
+            <AvatarFallback className={theme.background + " " + theme.text}>
               RC
             </AvatarFallback>
           </Avatar>
@@ -203,10 +223,10 @@ const Page = () => {
       {/* ABOUT */}
       <section
         id="about"
-        className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
+        className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${theme.background}`}
       >
         {/* background glow */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full"></div>
 
         <div className="grid md:grid-cols-2 gap-16 items-stretch">
 
@@ -214,31 +234,31 @@ const Page = () => {
           <div className="grid grid-cols-2 gap-4 h-full auto-rows-fr">
 
             {/* Location */}
-            <div className="p-4 rounded-xl bg-[#020617] border border-[#1E293B] h-full flex flex-col items-center justify-center text-center">
-              <MapPin className="text-[#145EFB] mb-2" />
-              <p className="text-sm text-[#CBD5E1]">Location</p>
-              <p className="text-white font-medium">{about?.location}</p>
+            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
+              <MapPin style={{ color: theme.primary }} className="mb-2" />
+              <p className={`text-sm ${theme.mutedText}`}>Location</p>
+              <p className={theme.text}>{about?.location}</p>
             </div>
 
             {/* Email */}
-            <div className="p-4 rounded-xl bg-[#020617] border border-[#1E293B] h-full flex flex-col items-center justify-center text-center">
-              <Mail className="text-[#145EFB] mb-2" />
-              <p className="text-sm text-[#CBD5E1]">Email</p>
-              <p className="text-white font-medium break-all">{about?.email}</p>
+            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
+              <Mail style={{ color: theme.primary }} className="mb-2" />
+              <p className={`text-sm ${theme.mutedText}`}>Email</p>
+              <p className={`${theme.text} break-all`}>{about?.email}</p>
             </div>
 
             {/* Phone */}
-            <div className="p-4 rounded-xl bg-[#020617] border border-[#1E293B] h-full flex flex-col items-center justify-center text-center">
-              <Phone className="text-[#145EFB] mb-2" />
-              <p className="text-sm text-[#CBD5E1]">Phone</p>
-              <p className="text-white font-medium">{about?.phone}</p>
+            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
+              <Phone style={{ color: theme.primary }} className="mb-2" />
+              <p className={`text-sm ${theme.mutedText}`}>Phone</p>
+              <p className={theme.text}>{about?.phone}</p>
             </div>
 
             {/* DOB */}
-            <div className="p-4 rounded-xl bg-[#020617] border border-[#1E293B] h-full flex flex-col items-center justify-center text-center">
-              <Calendar className="text-[#145EFB] mb-2" />
-              <p className="text-sm text-[#CBD5E1]">Date of Birth</p>
-              <p className="text-white font-medium">
+            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
+              <Calendar style={{ color: theme.primary }} className="mb-2" />
+              <p className={`text-sm ${theme.mutedText}`}>Date of Birth</p>
+              <p className={theme.text}>
                 {about?.dob && !isNaN(new Date(about.dob).getTime())
                   ? format(new Date(about.dob), "do MMMM yyyy")
                   : "—"}
@@ -246,10 +266,10 @@ const Page = () => {
             </div>
 
             {/* Languages */}
-            <div className="p-4 rounded-xl bg-[#020617] border border-[#1E293B] col-span-2 h-full flex flex-col items-center justify-center text-center">
-              <Globe className="text-[#145EFB] mb-2" />
-              <p className="text-sm text-[#CBD5E1]">Languages</p>
-              <p className="text-white font-medium">
+            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} col-span-2 flex flex-col items-center justify-center text-center`}>
+              <Globe style={{ color: theme.primary }} className="mb-2" />
+              <p className={`text-sm ${theme.mutedText}`}>Languages</p>
+              <p className={theme.text}>
                 {about?.languages?.join(", ")}
               </p>
             </div>
@@ -260,35 +280,37 @@ const Page = () => {
           <div className="space-y-6 h-full flex flex-col justify-between">
 
             <div className="space-y-6">
-              <h2 className="text-4xl font-bold text-white">
-                About <span className="text-[#145EFB]">Me</span>
+
+              <h2 className={`text-4xl font-bold ${theme.text}`}>
+                About <span style={{ color: theme.primary }}>Me</span>
               </h2>
 
-              <p className="text-[#CBD5E1] leading-relaxed">
+              {/* INTRO */}
+              <p className={theme.mutedText + " leading-relaxed"}>
                 {about?.introduction}
               </p>
 
-              {/* Journey */}
+              {/* JOURNEY */}
               {about?.journey && (
-                <div className="p-5 rounded-xl bg-[#020617] border border-[#1E293B]">
-                  <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-                    <Briefcase size={18} className="text-[#145EFB]" />
+                <div className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}>
+                  <h3 className={`font-semibold mb-2 flex items-center gap-2 ${theme.text}`}>
+                    <Briefcase size={18} style={{ color: theme.primary }} />
                     My Journey
                   </h3>
-                  <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                  <p className={`text-sm ${theme.mutedText} leading-relaxed`}>
                     {about?.journey}
                   </p>
                 </div>
               )}
 
-              {/* Current Work */}
+              {/* CURRENT WORK */}
               {about?.currentWork && (
-                <div className="p-5 rounded-xl bg-[#020617] border border-[#1E293B]">
-                  <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-                    <Briefcase size={18} className="text-[#145EFB]" />
+                <div className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}>
+                  <h3 className={`font-semibold mb-2 flex items-center gap-2 ${theme.text}`}>
+                    <Briefcase size={18} style={{ color: theme.primary }} />
                     Current Work
                   </h3>
-                  <p className="text-[#CBD5E1] text-sm leading-relaxed">
+                  <p className={`text-sm ${theme.mutedText} leading-relaxed`}>
                     {about?.currentWork}
                   </p>
                 </div>
@@ -296,7 +318,10 @@ const Page = () => {
             </div>
 
             {/* BUTTON */}
-            <button className="mt-6 bg-[#145EFB] hover:bg-[#0F4FD1] text-white px-6 py-2 rounded-md transition cursor-pointer">
+            <button
+              className="px-6 py-2 rounded-md text-white transition cursor-pointer"
+              style={{ backgroundColor: theme.primary }}
+            >
               Download CV
             </button>
 
@@ -307,16 +332,17 @@ const Page = () => {
 
 
       {/* SHOWCASE */}
-      <div className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden">
-        <h2 className="text-4xl font-bold text-center mb-6 text-white">
-          Portfolio <span className="text-[#145EFB]">Showcase</span>
+      <div className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${theme.background}`}>
+
+        <h2 className={`text-4xl font-bold text-center mb-6 ${theme.text}`}>
+          Portfolio <span style={{ color: theme.primary }}>Showcase</span>
         </h2>
 
-        <p className="text-center text-[#94A3B8] mb-10">
+        <p className={`text-center mb-10 ${theme.mutedText}`}>
           Explore my work, skills, and experience
         </p>
 
-        <div className="flex justify-center gap-5">
+        <div className="flex justify-center gap-5 flex-wrap">
 
           {[
             { key: "projects", label: "Projects", icon: FolderOpen },
@@ -332,18 +358,24 @@ const Page = () => {
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.05 }}
                 animate={{
-                  backgroundColor: activeTab === tab.key ? "#145EFB" : "#0B0F19",
-                  borderColor: activeTab === tab.key ? "#145EFB" : "#1E293B",
-                  color: "#ffffff",
+                  backgroundColor:
+                    activeTab === tab.key ? theme.primary : "transparent",
+
+                  borderColor:
+                    activeTab === tab.key ? theme.primary : theme.border,
+
+                  color:
+                    activeTab === tab.key ? theme.onPrimary : theme.text,
                 }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                className="flex items-center gap-3 px-8 py-4 rounded-xl border text-sm font-medium shadow-md cursor-pointer"
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className={`flex items-center gap-3 px-8 py-4 rounded-xl border text-sm font-medium shadow-md cursor-pointer`}
               >
                 <Icon size={18} />
                 {tab.label}
               </motion.button>
             );
           })}
+
         </div>
       </div>
 
@@ -352,10 +384,18 @@ const Page = () => {
       {activeTab === "projects" && (
         <section
           id="projects"
-          className="px-6 md:px-16 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden"
+          className={`px-6 md:px-16 pb-12 md:pb-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
+            }`}
         >
           {/* background glow */}
-          <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+          <div
+            className="absolute top-10 right-10 w-72 h-72 blur-3xl rounded-full"
+            style={{
+              backgroundColor: isDark
+                ? "rgba(20,94,251,0.1)"
+                : "rgba(20,94,251,0.08)",
+            }}
+          ></div>
 
           {/* grid */}
           <div className="grid md:grid-cols-3 gap-10 items-stretch">
@@ -363,12 +403,13 @@ const Page = () => {
             {projects.map((proj) => (
               <div
                 key={proj._id}
-                className="group relative rounded-xl overflow-hidden 
-        border border-[#1E293B] 
-        bg-[#020617]/80 backdrop-blur-sm
-        hover:-translate-y-3
-        hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]
-        transition duration-300 flex flex-col h-full"
+                className={`group relative rounded-xl overflow-hidden 
+  hover:-translate-y-3
+  transition duration-300 flex flex-col h-full
+  ${isDark
+                    ? "border border-[#1E293B] bg-[#020617]/80 backdrop-blur-sm hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]"
+                    : "border border-gray-200 bg-white hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]"
+                  }`}
               >
 
                 {/* TOP ACCENT LINE */}
@@ -381,22 +422,30 @@ const Page = () => {
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                   />
 
-                  {/* overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  {/* overlay ONLY for dark */}
+                  {isDark && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                  )}
                 </div>
 
                 {/* CONTENT */}
                 <div className="p-5 flex flex-col h-full">
 
-                  {/* TOP CONTENT */}
                   <div className="space-y-3 flex-1">
 
-                    <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
+                    {/* TITLE */}
+                    <h3
+                      className={`text-lg font-semibold transition group-hover:text-[#145EFB] ${isDark ? "text-white" : "text-gray-900"
+                        }`}
+                    >
                       {proj.title}
                     </h3>
 
-                    {/* ✅ FULL DESCRIPTION (NO CLAMP) */}
-                    <p className="text-sm text-[#CBD5E1] leading-relaxed">
+                    {/* DESCRIPTION */}
+                    <p
+                      className={`text-sm leading-relaxed ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                        }`}
+                    >
                       {proj.description}
                     </p>
 
@@ -405,7 +454,10 @@ const Page = () => {
                       {proj.technologies.map((tech, i) => (
                         <span
                           key={i}
-                          className="text-xs bg-[#0B0F19] border border-[#1E293B] px-2 py-1 rounded text-[#CBD5E1] group-hover:border-[#145EFB]/40 transition"
+                          className={`text-xs px-2 py-1 rounded transition ${isDark
+                            ? "bg-[#0B0F19] border border-[#1E293B] text-[#CBD5E1] group-hover:border-[#145EFB]/40"
+                            : "bg-gray-100 border border-gray-200 text-gray-700"
+                            }`}
                         >
                           {tech}
                         </span>
@@ -414,7 +466,7 @@ const Page = () => {
 
                   </div>
 
-                  {/* BUTTONS (ALWAYS BOTTOM) */}
+                  {/* BUTTONS */}
                   <div className="flex gap-3 pt-1 mt-auto">
 
                     {proj.liveURL && (
@@ -427,7 +479,12 @@ const Page = () => {
 
                     {proj.gitHubURL && (
                       <a href={proj.gitHubURL} target="_blank">
-                        <button className="border border-[#1E293B] text-white text-sm px-4 py-1.5 rounded hover:bg-[#0B0F19] hover:border-[#145EFB] transition cursor-pointer">
+                        <button
+                          className={`text-sm px-4 py-1.5 rounded transition cursor-pointer ${isDark
+                            ? "border border-[#1E293B] text-white hover:bg-[#0B0F19] hover:border-[#145EFB]"
+                            : "border border-gray-300 text-gray-800 hover:bg-gray-100"
+                            }`}
+                        >
                           Code
                         </button>
                       </a>
@@ -446,15 +503,31 @@ const Page = () => {
 
       {/* SKILLS */}
       {activeTab === "skills" && (
-        <section id="skills" className="px-6 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden">
+        <section
+          id="skills"
+          className={`px-6 pb-12 md:pb-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
+            }`}
+        >
 
           {/* glow */}
-          <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+          <div
+            className="absolute top-10 left-10 w-72 h-72 blur-3xl rounded-full"
+            style={{
+              backgroundColor: isDark
+                ? "rgba(20,94,251,0.1)"
+                : "rgba(20,94,251,0.08)",
+            }}
+          ></div>
 
           <div className="grid md:grid-cols-2 gap-10">
 
             {/* FRONTEND */}
-            <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+            <div
+              className={`rounded-xl p-6 transition ${isDark
+                ? "bg-[#020617] border border-[#1E293B]"
+                : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_20px_rgba(20,94,251,0.25)]"
+                }`}
+            >
               <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
                 Frontend
               </h3>
@@ -477,13 +550,13 @@ const Page = () => {
                       "tailwind css": <SiTailwindcss className="text-cyan-400" />,
                       redux: <SiRedux className="text-purple-500" />,
                       "redux toolkit": <SiRedux className="text-purple-500" />,
-                      next: <SiNextdotjs className="text-white" />,
-                      "next.js": <SiNextdotjs className="text-white" />,
+                      next: <SiNextdotjs className={isDark ? "text-white" : "text-black"} />,
+                      "next.js": <SiNextdotjs className={isDark ? "text-white" : "text-black"} />,
                       bootstrap: <SiBootstrap className="text-purple-600" />,
                       git: <FaGitAlt className="text-orange-500" />,
                       postman: <SiPostman className="text-orange-400" />,
                       render: <SiRender className="text-purple-400" />,
-                      vercel: <SiVercel className="text-white" />,
+                      vercel: <SiVercel className={isDark ? "text-white" : "text-black"} />,
                       "rest apis": <Globe className="text-[#145EFB]" />,
                     };
 
@@ -493,26 +566,37 @@ const Page = () => {
                   return (
                     <div
                       key={skill._id}
-                      className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
+                      className={`flex items-center justify-between p-4 rounded-lg transition ${isDark
+                        ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/50"
+                        : "bg-gray-50 border border-gray-200 hover:border-[#145EFB] hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                        }`}
                     >
                       {/* LEFT */}
                       <div className="flex items-center gap-3">
                         <span className="text-xl">
                           {getIcon(skill.skillName)}
                         </span>
-                        <span className="text-white">{skill.skillName}</span>
+                        <span className={isDark ? "text-white" : "text-gray-900"}>
+                          {skill.skillName}
+                        </span>
                       </div>
 
                       {/* RIGHT */}
                       <div className="flex items-center gap-2 w-40">
-                        <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
+                        <div
+                          className={`flex-1 h-[4px] rounded relative ${isDark ? "bg-[#1E293B]" : "bg-gray-200"
+                            }`}
+                        >
                           <div
                             className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
                             style={{ width: `${skill.level}%` }}
                           />
                         </div>
 
-                        <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                        <span
+                          className={`text-xs w-8 text-right ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                            }`}
+                        >
                           {skill.level}%
                         </span>
                       </div>
@@ -523,7 +607,12 @@ const Page = () => {
             </div>
 
             {/* BACKEND */}
-            <div className="bg-[#020617] border border-[#1E293B] rounded-xl p-6">
+            <div
+              className={`rounded-xl p-6 transition ${isDark
+                ? "bg-[#020617] border border-[#1E293B]"
+                : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_20px_rgba(20,94,251,0.25)]"
+                }`}
+            >
               <h3 className="text-xl font-semibold mb-6 text-[#145EFB]">
                 Backend
               </h3>
@@ -537,8 +626,8 @@ const Page = () => {
                     const map: Record<string, React.ReactNode> = {
                       "node.js": <FaNodeJs className="text-green-500" />,
                       node: <FaNodeJs className="text-green-500" />,
-                      "express.js": <SiExpress className="text-gray-300" />,
-                      express: <SiExpress className="text-gray-300" />,
+                      "express.js": <SiExpress className={isDark ? "text-gray-300" : "text-gray-700"} />,
+                      express: <SiExpress className={isDark ? "text-gray-300" : "text-gray-700"} />,
                       mongodb: <SiMongodb className="text-green-600" />,
                       git: <FaGitAlt className="text-orange-500" />,
                       jsonwebtoken: <SiJsonwebtokens className="text-pink-500" />,
@@ -550,26 +639,37 @@ const Page = () => {
                   return (
                     <div
                       key={skill._id}
-                      className="flex items-center justify-between bg-[#020617] border border-[#1E293B] p-4 rounded-lg hover:border-[#145EFB]/50 transition"
+                      className={`flex items-center justify-between p-4 rounded-lg transition ${isDark
+                        ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/50"
+                        : "bg-gray-50 border border-gray-200 hover:border-[#145EFB] hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                        }`}
                     >
                       {/* LEFT */}
                       <div className="flex items-center gap-3">
                         <span className="text-xl">
                           {getIcon(skill.skillName)}
                         </span>
-                        <span className="text-white">{skill.skillName}</span>
+                        <span className={isDark ? "text-white" : "text-gray-900"}>
+                          {skill.skillName}
+                        </span>
                       </div>
 
                       {/* RIGHT */}
                       <div className="flex items-center gap-2 w-40">
-                        <div className="flex-1 h-[4px] bg-[#1E293B] rounded relative">
+                        <div
+                          className={`flex-1 h-[4px] rounded relative ${isDark ? "bg-[#1E293B]" : "bg-gray-200"
+                            }`}
+                        >
                           <div
                             className="absolute top-0 left-0 h-[4px] bg-[#145EFB] rounded"
                             style={{ width: `${skill.level}%` }}
                           />
                         </div>
 
-                        <span className="text-xs text-[#CBD5E1] w-8 text-right">
+                        <span
+                          className={`text-xs w-8 text-right ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                            }`}
+                        >
                           {skill.level}%
                         </span>
                       </div>
@@ -588,69 +688,107 @@ const Page = () => {
       {activeTab === "experience" && (
         <section
           id="experience"
-          className="px-6 md:px-16 pb-12 md:pb-16 bg-[#0B0F19] relative overflow-hidden"
+          className={`px-6 md:px-16 pb-12 md:pb-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
+            }`}
         >
 
           {/* glow */}
-          <div className="absolute top-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+          <div
+            className="absolute top-10 right-10 w-72 h-72 blur-3xl rounded-full"
+            style={{
+              backgroundColor: isDark
+                ? "rgba(20,94,251,0.1)"
+                : "rgba(20,94,251,0.08)",
+            }}
+          ></div>
 
           {/* timeline */}
-          <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
+          <div
+            className={`relative pl-8 space-y-12 ${isDark ? "border-l border-[#1E293B]" : "border-l border-gray-200"
+              }`}
+          >
 
             {experience.map((exp) => (
               <div key={exp._id} className="relative group">
 
-                {/* DOT with icon */}
-                <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
-          bg-[#020617] border border-[#145EFB] 
-          flex items-center justify-center
-          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
+                {/* DOT */}
+                <div
+                  className={`absolute -left-[14px] top-6 w-7 h-7 rounded-full flex items-center justify-center ${isDark
+                    ? "bg-[#020617] border border-[#145EFB] shadow-[0_0_10px_rgba(20,94,251,0.6)]"
+                    : "bg-white border border-[#145EFB] shadow-md"
+                    }`}
+                >
                   <Briefcase size={14} className="text-[#145EFB]" />
                 </div>
 
                 {/* CARD */}
                 <div
-                  className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
-          hover:border-[#145EFB]/40
-          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
-          transition duration-300"
+                  className={`rounded-xl p-6 space-y-4 transition duration-300 ${isDark
+                    ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40 hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]"
+                    : "bg-white border border-gray-200 hover:shadow-[0_0_20px_rgba(20,94,251,0.2)]"
+                    }`}
                 >
 
-                  {/* ROLE + COMPANY */}
+                  {/* ROLE */}
                   <div className="flex items-center gap-2">
                     <Briefcase size={18} className="text-[#145EFB]" />
-                    <h3 className="text-lg font-semibold text-white group-hover:text-[#145EFB] transition">
+                    <h3
+                      className={`text-lg font-semibold transition group-hover:text-[#145EFB] ${isDark ? "text-white" : "text-gray-900"
+                        }`}
+                    >
                       {exp.role}
                     </h3>
                   </div>
 
-                  {/* COMPANY NAME */}
-                  <div className="flex items-center gap-2 text-[#CBD5E1]">
+                  {/* COMPANY */}
+                  <div
+                    className={`flex items-center gap-2 ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                      }`}
+                  >
                     <Building2 size={16} className="text-[#145EFB]" />
                     <p>{exp.company}</p>
                   </div>
 
                   {/* DATE */}
-                  <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
+                  <div
+                    className={`flex items-center gap-2 text-sm ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                      }`}
+                  >
                     <Calendar size={16} className="text-[#145EFB]" />
-                    <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
+                    <span
+                      className={`px-3 py-1 rounded-full ${isDark
+                        ? "bg-[#0B0F19] border border-[#1E293B]"
+                        : "bg-gray-100 border border-gray-200"
+                        }`}
+                    >
                       {format(new Date(exp.startDate), "MMM yyyy")} -{" "}
-                      {exp.endDate ? format(new Date(exp.endDate), "MMM yyyy") : "Present"}
+                      {exp.endDate
+                        ? format(new Date(exp.endDate), "MMM yyyy")
+                        : "Present"}
                     </span>
                   </div>
 
                   {/* DESCRIPTION */}
                   {exp.description && (
-                    <p className="text-[#CBD5E1] leading-relaxed">
+                    <p
+                      className={`leading-relaxed ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                        }`}
+                    >
                       {exp.description}
                     </p>
                   )}
 
                   {/* RESPONSIBILITIES */}
-                  <ul className="space-y-2 text-sm text-[#CBD5E1]">
+                  <ul
+                    className={`space-y-2 text-sm ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                      }`}
+                  >
                     {exp.responsibilities.map((item, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <CheckCircle size={14} className="text-[#145EFB] mt-1" />
+                        <CheckCircle
+                          size={14}
+                          className="text-[#145EFB] mt-1"
+                        />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -661,65 +799,95 @@ const Page = () => {
             ))}
 
           </div>
-        </section >
+        </section>
       )}
 
 
       {/* EDUCATION */}
       <section
         id="education"
-        className="px-6 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
+        className={`px-6 py-12 md:py-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
+          }`}
       >
 
         {/* glow */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+        <div
+          className="absolute top-10 left-10 w-72 h-72 blur-3xl rounded-full"
+          style={{
+            backgroundColor: isDark
+              ? "rgba(20,94,251,0.1)"
+              : "rgba(20,94,251,0.08)",
+          }}
+        ></div>
 
         {/* heading */}
-        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+        <h2
+          className={`text-4xl font-bold mb-16 text-center ${isDark ? "text-white" : "text-gray-900"
+            }`}
+        >
           My <span className="text-[#145EFB]">Education</span>
         </h2>
 
         {/* timeline */}
-        <div className="relative border-l border-[#1E293B] pl-8 space-y-12">
+        <div
+          className={`relative pl-8 space-y-12 ${isDark ? "border-l border-[#1E293B]" : "border-l border-gray-200"
+            }`}
+        >
 
           {education.map((edu) => (
             <div key={edu._id} className="relative group">
 
-              {/* DOT with icon */}
-              <div className="absolute -left-[14px] top-6 w-7 h-7 rounded-full 
-          bg-[#020617] border border-[#145EFB] 
-          flex items-center justify-center
-          shadow-[0_0_10px_rgba(20,94,251,0.6)]">
+              {/* DOT */}
+              <div
+                className={`absolute -left-[14px] top-6 w-7 h-7 rounded-full flex items-center justify-center ${isDark
+                  ? "bg-[#020617] border border-[#145EFB] shadow-[0_0_10px_rgba(20,94,251,0.6)]"
+                  : "bg-white border border-[#145EFB] shadow-md"
+                  }`}
+              >
                 <GraduationCap size={14} className="text-[#145EFB]" />
               </div>
 
               {/* CARD */}
               <div
-                className="bg-[#020617] border border-[#1E293B] rounded-xl p-6 space-y-4
-          hover:border-[#145EFB]/40
-          hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]
-          transition duration-300"
+                className={`rounded-xl p-6 space-y-4 transition duration-300 ${isDark
+                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40 hover:shadow-[0_0_25px_rgba(20,94,251,0.15)]"
+                  : "bg-white border border-gray-200 hover:shadow-[0_0_20px_rgba(20,94,251,0.2)]"
+                  }`}
               >
 
                 {/* DEGREE */}
                 <div className="flex items-center gap-2">
                   <GraduationCap size={18} className="text-[#145EFB]" />
-                  <h3 className="text-lg font-semibold text-white transition">
+                  <h3
+                    className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"
+                      }`}
+                  >
                     {edu.degree}
                     <span className="text-[#145EFB] ml-1">({edu.field})</span>
                   </h3>
                 </div>
 
                 {/* COLLEGE */}
-                <div className="flex items-center gap-2 text-[#CBD5E1]">
+                <div
+                  className={`flex items-center gap-2 ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                    }`}
+                >
                   <Building size={16} className="text-[#145EFB]" />
                   <p>{edu.college}</p>
                 </div>
 
                 {/* YEAR */}
-                <div className="flex items-center gap-2 text-sm text-[#CBD5E1]">
+                <div
+                  className={`flex items-center gap-2 text-sm ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
+                    }`}
+                >
                   <Calendar size={16} className="text-[#145EFB]" />
-                  <span className="px-3 py-1 rounded-full bg-[#0B0F19] border border-[#1E293B]">
+                  <span
+                    className={`px-3 py-1 rounded-full ${isDark
+                      ? "bg-[#0B0F19] border border-[#1E293B]"
+                      : "bg-gray-100 border border-gray-200"
+                      }`}
+                  >
                     {edu.startYear} - {edu.endYear}
                   </span>
                 </div>
@@ -735,14 +903,25 @@ const Page = () => {
       {/* CONTACT */}
       <section
         id="contact"
-        className="px-6 md:px-16 py-12 md:py-16 bg-[#0B0F19] relative overflow-hidden"
+        className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
+          }`}
       >
 
         {/* glow */}
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#145EFB]/10 blur-3xl rounded-full"></div>
+        <div
+          className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full"
+          style={{
+            backgroundColor: isDark
+              ? "rgba(20,94,251,0.1)"
+              : "rgba(20,94,251,0.08)",
+          }}
+        ></div>
 
         {/* heading */}
-        <h2 className="text-4xl font-bold mb-16 text-center text-white">
+        <h2
+          className={`text-4xl font-bold mb-16 text-center ${isDark ? "text-white" : "text-gray-900"
+            }`}
+        >
           Get In <span className="text-[#145EFB]">Touch</span>
         </h2>
 
@@ -752,10 +931,13 @@ const Page = () => {
           <div className="space-y-8">
 
             <div>
-              <h3 className="text-2xl font-semibold mb-3 text-white">
+              <h3
+                className={`text-2xl font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"
+                  }`}
+              >
                 Let’s build something amazing 🚀
               </h3>
-              <p className="text-[#CBD5E1]">
+              <p className={isDark ? "text-[#CBD5E1]" : "text-gray-600"}>
                 I’m open to freelance, full-time roles, and collaborations.
               </p>
             </div>
@@ -763,21 +945,42 @@ const Page = () => {
             <div className="space-y-4">
 
               {/* LOCATION */}
-              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+              <div
+                className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
+                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
+                  : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                  }`}
+              >
                 <MapPin className="text-[#145EFB]" />
-                <p className="text-white">{about?.location}</p>
+                <p className={isDark ? "text-white" : "text-gray-800"}>
+                  {about?.location}
+                </p>
               </div>
 
               {/* EMAIL */}
-              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+              <div
+                className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
+                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
+                  : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                  }`}
+              >
                 <Mail className="text-[#145EFB]" />
-                <p className="text-white break-all">{about?.email}</p>
+                <p className={`${isDark ? "text-white" : "text-gray-800"} break-all`}>
+                  {about?.email}
+                </p>
               </div>
 
               {/* PHONE */}
-              <div className="flex items-center gap-4 bg-[#020617] border border-[#1E293B] p-4 rounded-xl hover:border-[#145EFB]/40 transition">
+              <div
+                className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
+                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
+                  : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                  }`}
+              >
                 <Phone className="text-[#145EFB]" />
-                <p className="text-white">{about?.phone}</p>
+                <p className={isDark ? "text-white" : "text-gray-800"}>
+                  {about?.phone}
+                </p>
               </div>
 
             </div>
@@ -787,23 +990,40 @@ const Page = () => {
           <div className="relative">
 
             {/* glow */}
-            <div className="absolute inset-0 bg-[#145EFB]/20 blur-2xl opacity-20 rounded-2xl"></div>
+            <div
+              className={`absolute inset-0 blur-2xl opacity-20 rounded-2xl ${isDark ? "bg-[#145EFB]/20" : "bg-[#145EFB]/10"
+                }`}
+            ></div>
 
-            <div className="relative bg-[#020617] border border-[#1E293B] rounded-2xl p-8 space-y-5">
+            <div
+              className={`relative rounded-2xl p-8 space-y-5 ${isDark
+                ? "bg-[#020617] border border-[#1E293B]"
+                : "bg-white border border-gray-200 shadow-xl"
+                }`}
+            >
 
               <Input
                 placeholder="Your Name"
-                className="bg-[#0B0F19] border-[#1E293B] h-12 text-white placeholder:text-[#CBD5E1]"
+                className={`h-12 ${isDark
+                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
+                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                  }`}
               />
 
               <Input
                 placeholder="Your Email"
-                className="bg-[#0B0F19] border-[#1E293B] h-12 text-white placeholder:text-[#CBD5E1]"
+                className={`h-12 ${isDark
+                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
+                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                  }`}
               />
 
               <Textarea
                 placeholder="Your Message"
-                className="bg-[#0B0F19] border-[#1E293B] min-h-[120px] text-white placeholder:text-[#CBD5E1]"
+                className={`min-h-[120px] ${isDark
+                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
+                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
+                  }`}
               />
 
               <Button className="w-full h-12 bg-[#145EFB] hover:bg-[#0F4FD1] text-white transition shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.6)] cursor-pointer">

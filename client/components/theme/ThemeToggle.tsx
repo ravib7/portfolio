@@ -7,7 +7,12 @@ const ThemeToggle = () => {
     const { theme, setTheme } = useTheme()
 
     return <>
-        <Button variant="outline" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+        <Button
+            variant="outline"
+            size="icon"
+            className='cursor-pointer'
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
             {
                 theme === "dark"
                     ? <Sun />
