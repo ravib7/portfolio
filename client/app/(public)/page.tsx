@@ -18,7 +18,7 @@ import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, } from "react-ic
 import { SiTypescript, SiMongodb, SiExpress, SiNextdotjs, SiTailwindcss, SiRedux, SiJsonwebtokens, SiBootstrap, SiPostman, SiRender, SiVercel, } from "react-icons/si";
 import { Mail, Phone, MapPin, Calendar, Globe, Briefcase } from "lucide-react";
 import { format } from "date-fns";
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useAppTheme } from "@/components/hooks/useAppTheme";
 
@@ -26,6 +26,9 @@ const Page = () => {
   const [active, setActive] = useState("home");
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("projects")
+  const [index, setIndex] = useState(0)
+
+  const { theme, isDark } = useAppTheme();
 
   const { data: skillsData } = useGetPublicSkillsQuery();
   const { data: experienceData } = useGetPublicExperienceQuery();
@@ -40,35 +43,41 @@ const Page = () => {
   const education = educationData?.result || [];
   const about = aboutData?.result;
 
-  const { theme, isDark } = useAppTheme();
+  const titles = [
+    "Frontend Developer",
+    "Backend Developer",
+    "Mobile App Developer",
+  ]
 
 
   useEffect(() => {
-    const sections = [
-      "home",
-      "about",
-      "projects",
-      "education",
-      "contact",
-    ];
+    const sections = ["home", "about", "projects", "education", "contact"]
 
     const handleScroll = () => {
       sections.forEach((id) => {
-        const section = document.getElementById(id);
-        if (section) {
-          const top = section.offsetTop - 100;
-          const height = section.offsetHeight;
+        const section = document.getElementById(id)
 
-          if (window.scrollY >= top && window.scrollY < top + height) {
-            setActive(id);
+        if (section) {
+          const rect = section.getBoundingClientRect()
+
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            setActive(id)
           }
         }
-      });
-    };
+      })
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % titles.length)
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
 
 
   return (
@@ -87,7 +96,7 @@ const Page = () => {
           </h1>
 
           {/* DESKTOP MENU */}
-          <nav className={`hidden md:flex gap-8 ${theme.text}`}>
+          <motion.nav layout className={`hidden md:flex gap-8 ${theme.text}`}>
             {["home", "about", "projects", "education", "contact"].map((item) => (
               <a
                 key={item}
@@ -100,16 +109,16 @@ const Page = () => {
                 {item.charAt(0).toUpperCase() + item.slice(1)}
 
                 {/* UNDERLINE */}
-                <span
-                  className="absolute left-0 -bottom-1 h-[2px] transition-all duration-300"
-                  style={{
-                    backgroundColor: theme.primary,
-                    width: active === item ? "100%" : "0%",
-                  }}
-                />
+                {active === item && (
+                  <motion.span
+                    layoutId="underline"
+                    className="absolute left-0 -bottom-1 h-[2px] w-full"
+                    style={{ backgroundColor: theme.primary }}
+                  />
+                )}
               </a>
             ))}
-          </nav>
+          </motion.nav>
 
           {/* TOGGLE */}
           <ThemeToggle />
@@ -171,8 +180,28 @@ const Page = () => {
             </span>
           </h1>
 
-          <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8 }}>
+          {/* <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8 }}>
             {about?.title}
+          </p> */}
+
+          <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8, minHeight: "32px" }}>
+            <motion.div
+              key={titles[index]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex"
+            >
+              {titles[index].split("").map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              ))}
+            </motion.div>
           </p>
 
           <p className={`${theme.text}`} style={{ opacity: 0.6, maxWidth: "32rem" }}>
@@ -188,16 +217,18 @@ const Page = () => {
               Contact Me
             </Button>
 
-            <Button
-              variant="outline"
-              className={`cursor-pointer border transition`}
-              style={{
-                borderColor: theme.primary,
-                color: theme.primary,
-              }}
-            >
-              Download CV
-            </Button>
+            <a href="/Ravindra_Chaudhari_Resume.pdf" download="Ravindra_CV">
+              <Button
+                variant="outline"
+                className={`cursor-pointer border transition`}
+                style={{
+                  borderColor: theme.primary,
+                  color: theme.primary,
+                }}
+              >
+                Download CV
+              </Button>
+            </a>
           </div>
         </div>
 
@@ -318,13 +349,14 @@ const Page = () => {
             </div>
 
             {/* BUTTON */}
-            <button
-              className="px-6 py-2 rounded-md text-white transition cursor-pointer"
-              style={{ backgroundColor: theme.primary }}
-            >
-              Download CV
-            </button>
-
+            <a href="/Ravindra_Chaudhari_Resume.pdf" download="Ravindra_CV">
+              <Button
+                className="w-full py-5 rounded-md text-white transition cursor-pointer"
+                style={{ backgroundColor: theme.primary }}
+              >
+                Download CV
+              </Button>
+            </a>
           </div>
 
         </div>
