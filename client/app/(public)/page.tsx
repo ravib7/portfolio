@@ -180,8 +180,8 @@ const Page = () => {
             },
           },
         }}
-        className={`min-h-screen pt-24 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}
-      >
+        // className={`min-h-screen pt-24 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}
+        className={`min-h-[90vh] md:min-h-screen pt-24 md:pt-24 flex flex-col md:flex-row items-center justify-center md:justify-between gap-10 md:gap-0 px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}      >
         {/* glow */}
         <motion.div
           className="absolute top-20 left-10 w-72 h-72 blur-3xl rounded-full -z-10"
@@ -199,7 +199,8 @@ const Page = () => {
 
         {/* IMAGE */}
         <motion.div
-          className="flex justify-center items-start md:items-center order-1 md:order-2 mb-16 md:mb-0 z-10"
+          // className="flex justify-center items-start md:items-center order-1 md:order-2 mb-8 md:mb-0 z-10"
+          className="flex justify-center items-start md:items-center order-1 md:order-2 mb-8 md:mb-0 z-10 relative"
           variants={{
             hidden: { opacity: 0, x: 60 },
             show: {
@@ -230,7 +231,8 @@ const Page = () => {
 
         {/* TEXT */}
         <motion.div
-          className="max-w-2xl space-y-6 z-10 order-2 md:order-1"
+          // className="max-w-2xl space-y-6 z-10 order-2 md:order-1"
+          className="max-w-2xl space-y-6 z-10 relative order-2 md:order-1"
           variants={{
             hidden: { opacity: 0, x: -40 },
             show: {
