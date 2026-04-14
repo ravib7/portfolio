@@ -8,12 +8,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { useAddAboutInfoMutation, useDeleteAboutInfoMutation, useReadAboutInfoQuery, useUpdateAboutInfoMutation } from "@/redux/apis/admin.api"
 import { ABOUT, ADD_ABOUT_REQUEST, DELETE_ABOUT_REQUEST } from "@/types/admin"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
+import { format, parse } from "date-fns"
 import { CalendarDays, Mail, MapPin, Pencil, Phone, Trash2, } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
+
 
 const Page = () => {
     const [open, setOpen] = useState(false)
@@ -109,7 +110,7 @@ const Page = () => {
                         reset()
                         setOpen(true)
                     }}
-                    className="bg-[#155DFC] hover:bg-[#0f4cd1] cursor-pointer"
+                    className="bg-[#155DFC] hover:bg-[#0f4cd1] text-white cursor-pointer"
                 >
                     + Add About
                 </Button>
@@ -117,8 +118,9 @@ const Page = () => {
 
             {/* Cards */}
             <div className="space-y-6 max-w-5xl mx-auto">
-                {data &&
-                    data.result.map((item: any) => (
+
+                {
+                    data?.result && (
                         <Card className="w-full group rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-lg shadow-sm transition-all duration-300 hover:shadow-[0_20px_45px_rgba(21,93,252,0.25)] hover:-translate-y-1">
                             <CardContent className="p-8 space-y-6">
                                 {/* Top */}
@@ -126,7 +128,7 @@ const Page = () => {
 
                                     {/* LEFT IMAGE */}
                                     <img
-                                        src={item.profileImage || "/placeholder.png"}
+                                        src={data.result.profileImage || "/placeholder.png"}
                                         alt="profile"
                                         className="w-16 h-16 rounded-full object-cover object-top border-2 border-[#155DFC]/20 flex-shrink-0"
                                     />
@@ -134,21 +136,24 @@ const Page = () => {
                                     {/* CENTER CONTENT (FIX HERE) */}
                                     <div className="flex-1 text-center space-y-2">
                                         <h2 className="text-2xl font-semibold text-[#155DFC]">
-                                            {item.name}
+                                            {data.result.name}
                                         </h2>
 
-                                        <p className="text-gray-600 text-lg">{item.title}</p>
+                                        <p className="text-gray-600 text-lg">{data.result.title}</p>
 
                                         <div className="flex justify-center flex-wrap gap-5 text-sm text-gray-500 pt-1">
                                             <div className="flex items-center gap-2">
                                                 <MapPin size={16} className="text-[#155DFC]" />
-                                                {item.location}
+                                                {data.result.location}
                                             </div>
 
                                             <div className="flex items-center gap-2">
                                                 <CalendarDays size={16} className="text-[#155DFC]" />
-                                                {item.dob
-                                                    ? format(new Date(item.dob), "dd MMM yyyy")
+                                                {data.result.dob
+                                                    ? format(
+                                                        parse(data.result.dob, "dd/MM/yyyy", new Date()),
+                                                        "dd MMM yyyy"
+                                                    )
                                                     : "N/A"}
                                             </div>
                                         </div>
@@ -161,10 +166,10 @@ const Page = () => {
                                             size="icon"
                                             variant="outline"
                                             onClick={() => {
-                                                setSelectedAbout(item)
+                                                setSelectedAbout(data.result)
                                                 reset({
-                                                    ...item,
-                                                    languages: item.languages?.join(", ") || ""
+                                                    ...data.result,
+                                                    languages: data.result?.languages?.join(", ") || ""
                                                 })
                                                 setOpen(true)
                                             }}
@@ -177,7 +182,7 @@ const Page = () => {
                                             size="icon"
                                             variant="destructive"
                                             onClick={() =>
-                                                handleAboutInfoDelete({ _id: item._id })
+                                                handleAboutInfoDelete({ _id: data.result?._id as string })
                                             }
                                         >
                                             <Trash2 size={16} />
@@ -187,27 +192,56 @@ const Page = () => {
 
                                 <div className="border-t border-gray-100" />
 
-                                {/* Intro */}
-                                <p className="text-[15px] text-gray-700 leading-relaxed max-w-3xl">
-                                    {item.introduction}
-                                </p>
+                                {/* Introduction */}
+                                <div className="space-y-1">
+                                    <h3 className="text-sm font-semibold text-[#155DFC]">
+                                        Introduction
+                                    </h3>
+                                    <p className="text-[15px] text-gray-700 leading-relaxed">
+                                        {data.result.introduction}
+                                    </p>
+                                </div>
+
+                                {/* Journey */}
+                                {data.result.journey && (
+                                    <div className="space-y-1">
+                                        <h3 className="text-sm font-semibold text-[#155DFC]">
+                                            Journey
+                                        </h3>
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {data.result.journey}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Current Work */}
+                                {data.result.currentWork && (
+                                    <div className="space-y-1">
+                                        <h3 className="text-sm font-semibold text-[#155DFC]">
+                                            Current Work
+                                        </h3>
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {data.result.currentWork}
+                                        </p>
+                                    </div>
+                                )}
 
                                 {/* Contact */}
                                 <div className="flex flex-col gap-3 text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
                                         <Mail size={16} className="text-[#155DFC]" />
-                                        {item.email}
+                                        {data.result.email}
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                         <Phone size={16} className="text-[#155DFC]" />
-                                        {item.phone}
+                                        {data.result.phone}
                                     </div>
                                 </div>
 
                                 {/* Languages */}
                                 <div className="flex flex-wrap gap-3 pt-3">
-                                    {item.languages.map((lang: string, i: number) => (
+                                    {data.result.languages?.map((lang: string, i: number) => (
                                         <span
                                             key={i}
                                             className="px-4 py-1.5 text-xs rounded-full bg-[#155DFC]/10 text-[#155DFC] font-medium tracking-wide hover:bg-[#155DFC]/20 transition"
@@ -218,7 +252,7 @@ const Page = () => {
                                 </div>
                             </CardContent>
                         </Card>
-                    ))}
+                    )}
             </div>
 
             {/* Modal */}

@@ -85,7 +85,10 @@ const Page = () => {
     <div className={`${theme.background} ${theme.text}`}>
 
       {/* NAVBAR */}
-      <header
+      <motion.header
+        initial={{ opacity: 0, y: -25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         className={`fixed top-0 w-full z-50 backdrop-blur-md border-b ${theme.border} ${theme.background}/80`}
       >
         <div className="flex justify-between items-center px-6 md:px-16 py-4">
@@ -97,11 +100,18 @@ const Page = () => {
 
           {/* DESKTOP MENU */}
           <motion.nav layout className={`hidden md:flex gap-8 ${theme.text}`}>
-            {["home", "about", "projects", "education", "contact"].map((item) => (
-              <a
+            {["home", "about", "projects", "education", "contact"].map((item, i) => (
+              <motion.a
                 key={item}
                 href={`#${item}`}
-                className="relative group transition"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.15,
+                  ease: "easeOut",
+                }}
+                className="relative transition"
                 style={{
                   color: active === item ? theme.primary : undefined,
                 }}
@@ -116,7 +126,7 @@ const Page = () => {
                     style={{ backgroundColor: theme.primary }}
                   />
                 )}
-              </a>
+              </motion.a>
             ))}
           </motion.nav>
 
@@ -134,7 +144,10 @@ const Page = () => {
 
         {/* MOBILE MENU */}
         {open && (
-          <div
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             className={`md:hidden px-6 pb-6 flex flex-col gap-4 border-t ${theme.border} ${theme.background}`}
           >
             {["home", "about", "projects", "education", "contact"].map((item) => (
@@ -150,29 +163,46 @@ const Page = () => {
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </a>
             ))}
-          </div>
+          </motion.div>
         )}
-      </header>
+      </motion.header>
 
 
       {/* HERO */}
       <section
         id="home"
-        className={`min-h-screen pt-24 flex items-center justify-between px-6 md:px-16 relative overflow-hidden ${theme.background}`}
+        className={`min-h-screen pt-24 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}
       >
-        {/* background glow */}
+        {/* background glow (behind everything) */}
         <div
-          className="absolute top-20 left-10 w-72 h-72 blur-3xl rounded-full"
+          className="absolute top-20 left-10 w-72 h-72 blur-3xl rounded-full -z-10"
           style={{ backgroundColor: theme.primary, opacity: 0.2 }}
         />
 
         <div
-          className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full"
+          className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full -z-10"
           style={{ backgroundColor: theme.primary, opacity: 0.1 }}
         />
 
-        {/* LEFT CONTENT */}
-        <div className="max-w-2xl space-y-6 z-10">
+        {/* RIGHT IMAGE (TOP on mobile, RIGHT on desktop) */}
+        <div className="flex justify-center items-start md:items-center order-1 md:order-2 mb-16 md:mb-0 z-10">
+          <div
+            className="w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden shadow-xl relative z-10"
+            style={{
+              border: `2px solid ${theme.primary}`,
+              backgroundColor: "#ffffff",
+            }}
+          >
+            <img
+              src={about?.profileImage}
+              alt="profile"
+              className="w-full h-full object-contain object-top"
+            />
+          </div>
+        </div>
+
+        {/* LEFT CONTENT (BOTTOM on mobile, LEFT on desktop) */}
+        <div className="max-w-2xl space-y-6 z-10 order-2 md:order-1">
           <h1 className={`text-5xl md:text-6xl font-semibold leading-tight ${theme.text}`}>
             Hi, I'm{" "}
             <span style={{ color: theme.primary }}>
@@ -180,11 +210,11 @@ const Page = () => {
             </span>
           </h1>
 
-          {/* <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8 }}>
-            {about?.title}
-          </p> */}
-
-          <p className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8, minHeight: "32px" }}>
+          {/* animated title */}
+          <p
+            className={`text-xl md:text-2xl ${theme.text}`}
+            style={{ opacity: 0.8, minHeight: "32px" }}
+          >
             <motion.div
               key={titles[index]}
               initial={{ opacity: 0 }}
@@ -220,7 +250,7 @@ const Page = () => {
             <a href="/Ravindra_Chaudhari_Resume.pdf" download="Ravindra_CV">
               <Button
                 variant="outline"
-                className={`cursor-pointer border transition`}
+                className="cursor-pointer border transition"
                 style={{
                   borderColor: theme.primary,
                   color: theme.primary,
@@ -231,30 +261,13 @@ const Page = () => {
             </a>
           </div>
         </div>
-
-        {/* RIGHT IMAGE */}
-        <div className="hidden md:flex justify-center items-center">
-          <Avatar
-            className="w-80 h-80"
-            style={{ border: `1px solid ${theme.border}` }}
-          >
-            <AvatarImage
-              src={about?.profileImage}
-              className="object-top"
-            />
-
-            <AvatarFallback className={theme.background + " " + theme.text}>
-              RC
-            </AvatarFallback>
-          </Avatar>
-        </div>
       </section>
 
 
       {/* ABOUT */}
       <section
         id="about"
-        className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${theme.background}`}
+        className={`px-6 md:px-16 py-24 md:py-20 relative overflow-hidden ${theme.background}`}
       >
         {/* background glow */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full"></div>
