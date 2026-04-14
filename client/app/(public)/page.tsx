@@ -81,7 +81,6 @@ const Page = () => {
 
 
   return (
-    // <div className="bg-[#020617] text-white">
     <div className={`${theme.background} ${theme.text}`}>
 
       {/* NAVBAR */}
@@ -169,79 +168,136 @@ const Page = () => {
 
 
       {/* HERO */}
-      <section
+      <motion.section
         id="home"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: {},
+          show: {
+            transition: {
+              staggerChildren: 0.15,
+            },
+          },
+        }}
         className={`min-h-screen pt-24 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}
       >
-        {/* background glow (behind everything) */}
-        <div
+        {/* glow */}
+        <motion.div
           className="absolute top-20 left-10 w-72 h-72 blur-3xl rounded-full -z-10"
           style={{ backgroundColor: theme.primary, opacity: 0.2 }}
+          animate={{ y: [0, -12, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        <div
+        <motion.div
           className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full -z-10"
           style={{ backgroundColor: theme.primary, opacity: 0.1 }}
+          animate={{ y: [0, 12, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* RIGHT IMAGE (TOP on mobile, RIGHT on desktop) */}
-        <div className="flex justify-center items-start md:items-center order-1 md:order-2 mb-16 md:mb-0 z-10">
-          <div
-            className="w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden shadow-xl relative z-10"
+        {/* IMAGE */}
+        <motion.div
+          className="flex justify-center items-start md:items-center order-1 md:order-2 mb-16 md:mb-0 z-10"
+          variants={{
+            hidden: { opacity: 0, x: 60 },
+            show: {
+              opacity: 1,
+              x: 0,
+              transition: { duration: 0.9, ease: "easeOut" },
+            },
+          }}
+        >
+          <motion.div
+            className="w-52 h-52 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden shadow-xl"
             style={{
               border: `2px solid ${theme.primary}`,
-              backgroundColor: "#ffffff",
+              backgroundColor: "#fff",
             }}
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05 }}
           >
             <img
               src={about?.profileImage}
               alt="profile"
               className="w-full h-full object-contain object-top"
             />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* LEFT CONTENT (BOTTOM on mobile, LEFT on desktop) */}
-        <div className="max-w-2xl space-y-6 z-10 order-2 md:order-1">
-          <h1 className={`text-5xl md:text-6xl font-semibold leading-tight ${theme.text}`}>
+        {/* TEXT */}
+        <motion.div
+          className="max-w-2xl space-y-6 z-10 order-2 md:order-1"
+          variants={{
+            hidden: { opacity: 0, x: -40 },
+            show: {
+              opacity: 1,
+              x: 0,
+              transition: { duration: 0.9, ease: "easeOut" },
+            },
+          }}
+        >
+          {/* NAME */}
+          <motion.h1
+            className={`text-5xl md:text-6xl font-semibold ${theme.text}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7 }}
+          >
             Hi, I'm{" "}
             <span style={{ color: theme.primary }}>
               {about?.name}
             </span>
-          </h1>
+          </motion.h1>
 
-          {/* animated title */}
-          <p
-            className={`text-xl md:text-2xl ${theme.text}`}
-            style={{ opacity: 0.8, minHeight: "32px" }}
-          >
+          {/* TITLE */}
+          <div className={`text-xl md:text-2xl ${theme.text}`} style={{ opacity: 0.8 }}>
             <motion.div
               key={titles[index]}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
               className="flex"
             >
-              {titles[index].split("").map((char, i) => (
+              {titles[index].split("").map((char: string, i: number) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    delay: i * 0.05,
+                    duration: 0.3,
+                  }}
                 >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
               ))}
             </motion.div>
-          </p>
+          </div>
 
-          <p className={`${theme.text}`} style={{ opacity: 0.6, maxWidth: "32rem" }}>
+          {/* INTRO */}
+          <motion.p
+            className={`${theme.text}`}
+            style={{ opacity: 0.6, maxWidth: "32rem" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9 }}
+          >
             {about?.introduction}
-          </p>
+          </motion.p>
 
-          {/* buttons */}
-          <div className="flex gap-4 pt-2">
+          {/* BUTTONS */}
+          <motion.div
+            className="flex gap-4 pt-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             <Button
-              className="text-white transition cursor-pointer p-4"
+              className="text-white cursor-pointer p-4"
               style={{ backgroundColor: theme.primary }}
             >
               Contact Me
@@ -250,7 +306,7 @@ const Page = () => {
             <a href="/Ravindra_Chaudhari_Resume.pdf" download="Ravindra_CV">
               <Button
                 variant="outline"
-                className="cursor-pointer border transition"
+                className="cursor-pointer border"
                 style={{
                   borderColor: theme.primary,
                   color: theme.primary,
@@ -259,136 +315,237 @@ const Page = () => {
                 Download CV
               </Button>
             </a>
-          </div>
-        </div>
-      </section>
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
 
       {/* ABOUT */}
-      <section
+      <motion.section
         id="about"
         className={`px-6 md:px-16 py-24 md:py-20 relative overflow-hidden ${theme.background}`}
       >
         {/* background glow */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full"></div>
+        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
 
-        <div className="grid md:grid-cols-2 gap-16 items-stretch">
+        {/* <div className="grid md:grid-cols-2 gap-16 items-stretch"> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-stretch">
 
-          {/* LEFT SIDE */}
-          <div className="grid grid-cols-2 gap-4 h-full auto-rows-fr">
+          {/* LEFT SIDE GRID (STAGGER ANIMATION) */}
+          <motion.div
+            className="grid grid-cols-2 gap-4 h-full auto-rows-fr order-2 md:order-1"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              show: {
+                transition: {
+                  staggerChildren: 0.12,
+                },
+              },
+            }}
+          >
 
-            {/* Location */}
-            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
-              <MapPin style={{ color: theme.primary }} className="mb-2" />
-              <p className={`text-sm ${theme.mutedText}`}>Location</p>
-              <p className={theme.text}>{about?.location}</p>
-            </div>
+            {[
+              {
+                icon: MapPin,
+                label: "Location",
+                value: about?.location,
+              },
+              {
+                icon: Mail,
+                label: "Email",
+                value: about?.email,
+              },
+              {
+                icon: Phone,
+                label: "Phone",
+                value: about?.phone,
+              },
+              {
+                icon: Calendar,
+                label: "Date of Birth",
+                value:
+                  about?.dob && !isNaN(new Date(about.dob).getTime())
+                    ? format(new Date(about.dob), "do MMMM yyyy")
+                    : "—",
+              },
+            ].map((item, i) => {
+              const Icon = item.icon;
 
-            {/* Email */}
-            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
-              <Mail style={{ color: theme.primary }} className="mb-2" />
-              <p className={`text-sm ${theme.mutedText}`}>Email</p>
-              <p className={`${theme.text} break-all`}>{about?.email}</p>
-            </div>
+              return (
+                <motion.div
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.8, y: 20 },
+                    show: { opacity: 1, scale: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}
+                >
+                  <Icon style={{ color: theme.primary }} className="mb-2" />
+                  <p className={`text-sm ${theme.mutedText}`}>{item.label}</p>
+                  <p className={theme.text}>{item.value}</p>
+                </motion.div>
+              );
+            })}
 
-            {/* Phone */}
-            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
-              <Phone style={{ color: theme.primary }} className="mb-2" />
-              <p className={`text-sm ${theme.mutedText}`}>Phone</p>
-              <p className={theme.text}>{about?.phone}</p>
-            </div>
-
-            {/* DOB */}
-            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} flex flex-col items-center justify-center text-center`}>
-              <Calendar style={{ color: theme.primary }} className="mb-2" />
-              <p className={`text-sm ${theme.mutedText}`}>Date of Birth</p>
-              <p className={theme.text}>
-                {about?.dob && !isNaN(new Date(about.dob).getTime())
-                  ? format(new Date(about.dob), "do MMMM yyyy")
-                  : "—"}
-              </p>
-            </div>
-
-            {/* Languages */}
-            <div className={`p-4 rounded-xl border ${theme.border} ${theme.card} col-span-2 flex flex-col items-center justify-center text-center`}>
+            {/* LANGUAGES (full width card) */}
+            <motion.div
+              className={`p-4 rounded-xl border ${theme.border} ${theme.card} col-span-2 flex flex-col items-center justify-center text-center`}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <Globe style={{ color: theme.primary }} className="mb-2" />
               <p className={`text-sm ${theme.mutedText}`}>Languages</p>
               <p className={theme.text}>
                 {about?.languages?.join(", ")}
               </p>
-            </div>
+            </motion.div>
 
-          </div>
+          </motion.div>
 
-          {/* RIGHT SIDE */}
-          <div className="space-y-6 h-full flex flex-col justify-between">
+          {/* RIGHT SIDE (SLIDE UP DIFFERENT STYLE) */}
+          <motion.div
+            className="space-y-6 h-full flex flex-col justify-between order-1 md:order-2"
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
 
             <div className="space-y-6">
 
-              <h2 className={`text-4xl font-bold ${theme.text}`}>
+              <motion.h2
+                className={`text-4xl font-bold ${theme.text}`}
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7 }}
+                viewport={{ once: true }}
+              >
                 About <span style={{ color: theme.primary }}>Me</span>
-              </h2>
+              </motion.h2>
 
               {/* INTRO */}
-              <p className={theme.mutedText + " leading-relaxed"}>
+              <motion.p
+                className={theme.mutedText + " leading-relaxed"}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.9 }}
+                viewport={{ once: true }}
+              >
                 {about?.introduction}
-              </p>
+              </motion.p>
 
               {/* JOURNEY */}
               {about?.journey && (
-                <div className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}>
+                <motion.div
+                  className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7 }}
+                  viewport={{ once: true }}
+                >
                   <h3 className={`font-semibold mb-2 flex items-center gap-2 ${theme.text}`}>
                     <Briefcase size={18} style={{ color: theme.primary }} />
                     My Journey
                   </h3>
-                  <p className={`text-sm ${theme.mutedText} leading-relaxed`}>
+                  <p className={`text-sm ${theme.mutedText}`}>
                     {about?.journey}
                   </p>
-                </div>
+                </motion.div>
               )}
 
               {/* CURRENT WORK */}
               {about?.currentWork && (
-                <div className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}>
+                <motion.div
+                  className={`p-5 rounded-xl border ${theme.border} ${theme.card}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.1 }}
+                  viewport={{ once: true }}
+                >
                   <h3 className={`font-semibold mb-2 flex items-center gap-2 ${theme.text}`}>
                     <Briefcase size={18} style={{ color: theme.primary }} />
                     Current Work
                   </h3>
-                  <p className={`text-sm ${theme.mutedText} leading-relaxed`}>
+                  <p className={`text-sm ${theme.mutedText}`}>
                     {about?.currentWork}
                   </p>
-                </div>
+                </motion.div>
               )}
+
             </div>
 
             {/* BUTTON */}
-            <a href="/Ravindra_Chaudhari_Resume.pdf" download="Ravindra_CV">
+            <motion.a
+              href="/Ravindra_Chaudhari_Resume.pdf"
+              download="Ravindra_CV"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <Button
                 className="w-full py-5 rounded-md text-white transition cursor-pointer"
                 style={{ backgroundColor: theme.primary }}
               >
                 Download CV
               </Button>
-            </a>
-          </div>
+            </motion.a>
+
+          </motion.div>
 
         </div>
-      </section>
+      </motion.section>
 
 
       {/* SHOWCASE */}
-      <div className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${theme.background}`}>
-
-        <h2 className={`text-4xl font-bold text-center mb-6 ${theme.text}`}>
+      <motion.div
+        className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${theme.background}`}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        {/* TITLE */}
+        <motion.h2
+          className={`text-4xl font-bold text-center mb-6 ${theme.text}`}
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           Portfolio <span style={{ color: theme.primary }}>Showcase</span>
-        </h2>
+        </motion.h2>
 
-        <p className={`text-center mb-10 ${theme.mutedText}`}>
+        {/* SUBTITLE */}
+        <motion.p
+          className={`text-center mb-10 ${theme.mutedText}`}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
           Explore my work, skills, and experience
-        </p>
+        </motion.p>
 
-        <div className="flex justify-center gap-5 flex-wrap">
-
+        {/* BUTTONS */}
+        <motion.div
+          className="flex justify-center gap-5 flex-wrap"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            show: {
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+        >
           {[
             { key: "projects", label: "Projects", icon: FolderOpen },
             { key: "skills", label: "Skills", icon: Code2 },
@@ -400,6 +557,10 @@ const Page = () => {
               <motion.button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.9 },
+                  show: { opacity: 1, y: 0, scale: 1 },
+                }}
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.05 }}
                 animate={{
@@ -411,18 +572,31 @@ const Page = () => {
 
                   color:
                     activeTab === tab.key ? theme.onPrimary : theme.text,
+
+                  boxShadow:
+                    activeTab === tab.key
+                      ? `0px 0px 20px ${theme.primary}40`
+                      : "none",
                 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={`flex items-center gap-3 px-8 py-4 rounded-xl border text-sm font-medium shadow-md cursor-pointer`}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-3 px-8 py-4 rounded-xl border text-sm font-medium cursor-pointer"
               >
                 <Icon size={18} />
-                {tab.label}
+
+                {/* text animation on active change */}
+                <motion.span
+                  animate={{
+                    scale: activeTab === tab.key ? 1.05 : 1,
+                  }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {tab.label}
+                </motion.span>
               </motion.button>
             );
           })}
-
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
 
       {/* PROJECTS */}
@@ -440,25 +614,45 @@ const Page = () => {
                 ? "rgba(20,94,251,0.1)"
                 : "rgba(20,94,251,0.08)",
             }}
-          ></div>
+          />
 
-          {/* grid */}
+          {/* GRID */}
           <div className="grid md:grid-cols-3 gap-10 items-stretch">
-
-            {projects.map((proj) => (
-              <div
+            {projects.map((proj, i) => (
+              <motion.div
                 key={proj._id}
-                className={`group relative rounded-xl overflow-hidden 
-  hover:-translate-y-3
-  transition duration-300 flex flex-col h-full
-  ${isDark
+                className={`group relative rounded-xl overflow-hidden flex flex-col h-full
+            ${isDark
                     ? "border border-[#1E293B] bg-[#020617]/80 backdrop-blur-sm hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]"
                     : "border border-gray-200 bg-white hover:shadow-[0_0_25px_rgba(20,94,251,0.25)]"
                   }`}
-              >
 
+                /* 🔥 NEW UNIQUE ANIMATION (DIFFERENT FROM ABOUT) */
+                initial={{
+                  opacity: 0,
+                  x: i % 2 === 0 ? -70 : 70,   // alternate direction
+                  scale: 0.96,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.1,
+                  ease: "easeOut",
+                }}
+                viewport={{ once: true, amount: 0.2 }}
+
+                /* SIMPLE HOVER ONLY */
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                }}
+              >
                 {/* TOP ACCENT LINE */}
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#145EFB] to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#145EFB] to-transparent opacity-0 group-hover:opacity-100 transition" />
 
                 {/* IMAGE */}
                 <div className="h-60 overflow-hidden relative">
@@ -467,18 +661,15 @@ const Page = () => {
                     className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                   />
 
-                  {/* overlay ONLY for dark */}
                   {isDark && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   )}
                 </div>
 
                 {/* CONTENT */}
                 <div className="p-5 flex flex-col h-full">
-
                   <div className="space-y-3 flex-1">
 
-                    {/* TITLE */}
                     <h3
                       className={`text-lg font-semibold transition group-hover:text-[#145EFB] ${isDark ? "text-white" : "text-gray-900"
                         }`}
@@ -486,7 +677,6 @@ const Page = () => {
                       {proj.title}
                     </h3>
 
-                    {/* DESCRIPTION */}
                     <p
                       className={`text-sm leading-relaxed ${isDark ? "text-[#CBD5E1]" : "text-gray-600"
                         }`}
@@ -494,13 +684,12 @@ const Page = () => {
                       {proj.description}
                     </p>
 
-                    {/* TECH STACK */}
                     <div className="flex flex-wrap gap-2 pt-2">
                       {proj.technologies.map((tech, i) => (
                         <span
                           key={i}
                           className={`text-xs px-2 py-1 rounded transition ${isDark
-                            ? "bg-[#0B0F19] border border-[#1E293B] text-[#CBD5E1] group-hover:border-[#145EFB]/40"
+                            ? "bg-[#0B0F19] border border-[#1E293B] text-[#CBD5E1]"
                             : "bg-gray-100 border border-gray-200 text-gray-700"
                             }`}
                         >
@@ -512,11 +701,11 @@ const Page = () => {
                   </div>
 
                   {/* BUTTONS */}
-                  <div className="flex gap-3 pt-1 mt-auto">
+                  <div className="flex gap-3 pt-3 mt-auto">
 
                     {proj.liveURL && (
                       <a href={proj.liveURL} target="_blank">
-                        <button className="bg-[#145EFB] hover:bg-[#0F4FD1] text-white text-sm px-4 py-1.5 rounded transition shadow-md hover:shadow-[0_0_10px_rgba(20,94,251,0.6)] cursor-pointer">
+                        <button className="bg-[#145EFB] hover:bg-[#0F4FD1] text-white text-sm px-4 py-1.5 rounded transition shadow-md cursor-pointer">
                           Live
                         </button>
                       </a>
@@ -526,8 +715,8 @@ const Page = () => {
                       <a href={proj.gitHubURL} target="_blank">
                         <button
                           className={`text-sm px-4 py-1.5 rounded transition cursor-pointer ${isDark
-                            ? "border border-[#1E293B] text-white hover:bg-[#0B0F19] hover:border-[#145EFB]"
-                            : "border border-gray-300 text-gray-800 hover:bg-gray-100"
+                            ? "border border-[#1E293B] text-white"
+                            : "border border-gray-300 text-gray-800"
                             }`}
                         >
                           Code
@@ -538,9 +727,8 @@ const Page = () => {
                   </div>
 
                 </div>
-              </div>
+              </motion.div>
             ))}
-
           </div>
         </section>
       )}
@@ -854,7 +1042,6 @@ const Page = () => {
         className={`px-6 py-12 md:py-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
           }`}
       >
-
         {/* glow */}
         <div
           className="absolute top-10 left-10 w-72 h-72 blur-3xl rounded-full"
@@ -863,34 +1050,50 @@ const Page = () => {
               ? "rgba(20,94,251,0.1)"
               : "rgba(20,94,251,0.08)",
           }}
-        ></div>
+        />
 
-        {/* heading */}
-        <h2
+        {/* heading → animates ONLY when you reach it */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.6 }}
           className={`text-4xl font-bold mb-16 text-center ${isDark ? "text-white" : "text-gray-900"
             }`}
         >
           My <span className="text-[#145EFB]">Education</span>
-        </h2>
+        </motion.h2>
 
-        {/* timeline */}
+        {/* timeline wrapper */}
         <div
           className={`relative pl-8 space-y-12 ${isDark ? "border-l border-[#1E293B]" : "border-l border-gray-200"
             }`}
         >
-
-          {education.map((edu) => (
-            <div key={edu._id} className="relative group">
-
+          {education.map((edu, i) => (
+            <motion.div
+              key={edu._id}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.1,
+              }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="relative group"
+            >
               {/* DOT */}
-              <div
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                viewport={{ once: true, amount: 0.3 }}
                 className={`absolute -left-[14px] top-6 w-7 h-7 rounded-full flex items-center justify-center ${isDark
-                  ? "bg-[#020617] border border-[#145EFB] shadow-[0_0_10px_rgba(20,94,251,0.6)]"
-                  : "bg-white border border-[#145EFB] shadow-md"
+                  ? "bg-[#020617] border border-[#145EFB]"
+                  : "bg-white border border-[#145EFB]"
                   }`}
               >
                 <GraduationCap size={14} className="text-[#145EFB]" />
-              </div>
+              </motion.div>
 
               {/* CARD */}
               <div
@@ -899,7 +1102,6 @@ const Page = () => {
                   : "bg-white border border-gray-200 hover:shadow-[0_0_20px_rgba(20,94,251,0.2)]"
                   }`}
               >
-
                 {/* DEGREE */}
                 <div className="flex items-center gap-2">
                   <GraduationCap size={18} className="text-[#145EFB]" />
@@ -908,7 +1110,9 @@ const Page = () => {
                       }`}
                   >
                     {edu.degree}
-                    <span className="text-[#145EFB] ml-1">({edu.field})</span>
+                    <span className="text-[#145EFB] ml-1">
+                      ({edu.field})
+                    </span>
                   </h3>
                 </div>
 
@@ -936,22 +1140,22 @@ const Page = () => {
                     {edu.startYear} - {edu.endYear}
                   </span>
                 </div>
-
               </div>
-            </div>
+            </motion.div>
           ))}
-
         </div>
       </section>
 
 
       {/* CONTACT */}
-      <section
+      <motion.section
         id="contact"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
         className={`px-6 md:px-16 py-12 md:py-16 relative overflow-hidden ${isDark ? "bg-[#0B0F19]" : "bg-white"
           }`}
       >
-
         {/* glow */}
         <div
           className="absolute bottom-10 right-10 w-72 h-72 blur-3xl rounded-full"
@@ -960,37 +1164,51 @@ const Page = () => {
               ? "rgba(20,94,251,0.1)"
               : "rgba(20,94,251,0.08)",
           }}
-        ></div>
+        />
 
         {/* heading */}
-        <h2
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
           className={`text-4xl font-bold mb-16 text-center ${isDark ? "text-white" : "text-gray-900"
             }`}
         >
           Get In <span className="text-[#145EFB]">Touch</span>
-        </h2>
+        </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
 
           {/* LEFT SIDE */}
           <div className="space-y-8">
 
-            <div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <h3
                 className={`text-2xl font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"
                   }`}
               >
                 Let’s build something amazing 🚀
               </h3>
+
               <p className={isDark ? "text-[#CBD5E1]" : "text-gray-600"}>
                 I’m open to freelance, full-time roles, and collaborations.
               </p>
-            </div>
+            </motion.div>
 
             <div className="space-y-4">
 
               {/* LOCATION */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
                 className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
                   ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
                   : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
@@ -1000,45 +1218,59 @@ const Page = () => {
                 <p className={isDark ? "text-white" : "text-gray-800"}>
                   {about?.location}
                 </p>
-              </div>
+              </motion.div>
 
               {/* EMAIL */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
                 className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
-                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
-                  : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                  ? "bg-[#020617] border border-[#1E293B]"
+                  : "bg-white border border-gray-200 shadow-md"
                   }`}
               >
                 <Mail className="text-[#145EFB]" />
                 <p className={`${isDark ? "text-white" : "text-gray-800"} break-all`}>
                   {about?.email}
                 </p>
-              </div>
+              </motion.div>
 
               {/* PHONE */}
-              <div
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
                 className={`flex items-center gap-4 p-4 rounded-xl transition ${isDark
-                  ? "bg-[#020617] border border-[#1E293B] hover:border-[#145EFB]/40"
-                  : "bg-white border border-gray-200 shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.2)]"
+                  ? "bg-[#020617] border border-[#1E293B]"
+                  : "bg-white border border-gray-200 shadow-md"
                   }`}
               >
                 <Phone className="text-[#145EFB]" />
                 <p className={isDark ? "text-white" : "text-gray-800"}>
                   {about?.phone}
                 </p>
-              </div>
+              </motion.div>
 
             </div>
           </div>
 
           {/* RIGHT SIDE FORM */}
-          <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
 
             {/* glow */}
             <div
               className={`absolute inset-0 blur-2xl opacity-20 rounded-2xl ${isDark ? "bg-[#145EFB]/20" : "bg-[#145EFB]/10"
                 }`}
-            ></div>
+            />
 
             <div
               className={`relative rounded-2xl p-8 space-y-5 ${isDark
@@ -1047,39 +1279,49 @@ const Page = () => {
                 }`}
             >
 
-              <Input
-                placeholder="Your Name"
-                className={`h-12 ${isDark
-                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
-                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
-                  }`}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Input placeholder="Your Name" className="h-12" />
+              </motion.div>
 
-              <Input
-                placeholder="Your Email"
-                className={`h-12 ${isDark
-                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
-                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
-                  }`}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Input placeholder="Your Email" className="h-12" />
+              </motion.div>
 
-              <Textarea
-                placeholder="Your Message"
-                className={`min-h-[120px] ${isDark
-                  ? "bg-[#0B0F19] border-[#1E293B] text-white placeholder:text-[#CBD5E1]"
-                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500"
-                  }`}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <Textarea placeholder="Your Message" className="min-h-[120px]" />
+              </motion.div>
 
-              <Button className="w-full h-12 bg-[#145EFB] hover:bg-[#0F4FD1] text-white transition shadow-md hover:shadow-[0_0_12px_rgba(20,94,251,0.6)] cursor-pointer">
-                Send Message
-              </Button>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                <Button className="w-full h-12 bg-[#145EFB] text-white">
+                  Send Message
+                </Button>
+              </motion.div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
-      </section>
+      </motion.section>
 
     </div >
   );
