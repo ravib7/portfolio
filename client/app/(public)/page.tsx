@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Building, Building2, CheckCircle, Code2, FolderOpen, GraduationCap, Menu, X } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -180,7 +179,6 @@ const Page = () => {
             },
           },
         }}
-        // className={`min-h-screen pt-24 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}
         className={`min-h-[90vh] md:min-h-screen pt-24 md:pt-24 flex flex-col md:flex-row items-center justify-center md:justify-between gap-10 md:gap-0 px-6 md:px-16 relative overflow-hidden z-0 ${theme.background}`}      >
         {/* glow */}
         <motion.div
@@ -199,7 +197,6 @@ const Page = () => {
 
         {/* IMAGE */}
         <motion.div
-          // className="flex justify-center items-start md:items-center order-1 md:order-2 mb-8 md:mb-0 z-10"
           className="flex justify-center items-start md:items-center order-1 md:order-2 mb-8 md:mb-0 z-10 relative"
           variants={{
             hidden: { opacity: 0, x: 60 },
@@ -231,7 +228,6 @@ const Page = () => {
 
         {/* TEXT */}
         <motion.div
-          // className="max-w-2xl space-y-6 z-10 order-2 md:order-1"
           className="max-w-2xl space-y-6 z-10 relative order-2 md:order-1"
           variants={{
             hidden: { opacity: 0, x: -40 },
@@ -267,12 +263,14 @@ const Page = () => {
               {titles[index].split("").map((char: string, i: number) => (
                 <motion.span
                   key={i}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
                     delay: i * 0.05,
-                    duration: 0.3,
+                    duration: 0.4,
+                    ease: "easeOut",
                   }}
+                  className="inline-block"
                 >
                   {char === " " ? "\u00A0" : char}
                 </motion.span>
